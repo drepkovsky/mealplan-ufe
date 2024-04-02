@@ -1,5 +1,5 @@
-import { newSpecPage } from '@stencil/core/testing';
-import { RrkMealplanApp } from '../rrk-mealplan-app';
+// import { newSpecPage } from '@stencil/core/testing';
+// import { RrkMealplanApp } from '../rrk-mealplan-app';
 
 // describe('rrk-mealplan-app', () => {
 //   it('renders editor', async () => {
