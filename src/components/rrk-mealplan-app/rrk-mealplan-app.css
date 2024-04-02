@@ -1,3 +1,35 @@
 :host {
   display: block;
 }
+
+.navbar {
+  display: flex;
+  margin-bottom: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  list-style: none;
+
+  & :hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.counter {
+  display: flex;
+  border-radius: 50%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

@@ -10,6 +10,7 @@ export namespace Components {
         "ambulanceId": string;
         "apiBase": string;
         "basePath": string;
+        "counter": number;
     }
     interface RrkMealplanMealEditor {
         "ambulanceId": string;
@@ -81,6 +82,7 @@ declare namespace LocalJSX {
         "ambulanceId"?: string;
         "apiBase"?: string;
         "basePath"?: string;
+        "counter"?: number;
     }
     interface RrkMealplanMealEditor {
         "ambulanceId"?: string;

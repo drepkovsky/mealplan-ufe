@@ -17,6 +17,10 @@ export class RrkMealplanApp {
   @Prop() apiBase: string;
   @Prop() ambulanceId: string;
 
+  @Prop() counter: number = 0;
+
+  interval: NodeJS.Timeout;
+
   componentWillLoad() {
     const baseUri = new URL(this.basePath, document.baseURI || '/').pathname;
 
@@ -37,6 +41,14 @@ export class RrkMealplanApp {
     });
 
     toRelative(location.pathname);
+
+    this.interval = setInterval(() => {
+      this.counter++;
+    }, 1000);
+  }
+
+  disconnectedCallback() {
+    clearInterval(this.interval);
   }
 
   render() {
@@ -56,6 +68,28 @@ export class RrkMealplanApp {
 
     return (
       <Host>
+        <div class="content">
+          <div class="navbar">
+            <h1>Sprava jedalnickov pacientov</h1>
+
+            <nav>
+              <ul class="navbar-menu">
+                <li>
+                  <a href="#">Zoznam jedal</a>
+                </li>
+                <li>
+                  <a href="#">Zoznam pacientov</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          <div class="counter">
+            Pocitatlo s casovacom ako ukazka JS.
+            <br />
+            {this.counter}
+          </div>
+        </div>
         {element === 'editor' ? (
           <rrk-mealplan-meal-editor
             entry-id={entryId}
