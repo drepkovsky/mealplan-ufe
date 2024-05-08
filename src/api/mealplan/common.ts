@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * MealpLan API
- * Mealplan API
+ * Hospital Meal Plan Management API
+ * API to manage meals, patients, and their meal plans in a hospital.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: <your_email>

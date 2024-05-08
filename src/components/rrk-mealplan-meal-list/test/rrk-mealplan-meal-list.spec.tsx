@@ -1,24 +1,36 @@
 import { newSpecPage } from '@stencil/core/testing';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { WaitingListEntry } from '../../../api/mealplan';
 import { RrkMealplanMealList } from '../rrk-mealplan-meal-list';
+import { Meal } from '../../../api/mealplan';
 
 describe('rrk-mealplan-meal-list', () => {
-  const sampleEntries: WaitingListEntry[] = [
+  const sampleEntries: Meal[] = [
     {
       id: 'entry-1',
-      patientId: 'p-1',
-      name: 'Juraj Prvý',
-      waitingSince: '20240203T12:00',
-      estimatedDurationMinutes: 20,
+      allergens: ['nuts'],
+      ingredients: ['water', 'flour', 'nuts'],
+      name: 'Chlieb',
+      portionSize: '200',
+      nutrients: {
+        calories: 100,
+        carbohydrates: 10,
+        fats: 5,
+        proteins: 1,
+      },
     },
     {
       id: 'entry-2',
-      patientId: 'p-2',
-      name: 'James Druhý',
-      waitingSince: '20240203T12:05',
-      estimatedDurationMinutes: 5,
+      allergens: ['milk'],
+      ingredients: ['water', 'flour', 'milk'],
+      name: 'Vajca s maslom',
+      portionSize: '300',
+      nutrients: {
+        calories: 200,
+        carbohydrates: 20,
+        fats: 10,
+        proteins: 2,
+      },
     },
   ];
 
@@ -41,7 +53,7 @@ describe('rrk-mealplan-meal-list', () => {
       html: `<rrk-mealplan-meal-list ambulance-id="test-ambulance" api-base="http://test/api"></rrk-mealplan-meal-list>`,
     });
     const wlList = page.rootInstance as RrkMealplanMealList;
-    const expectedPatients = wlList?.waitingPatients?.length;
+    const expectedPatients = wlList?.meals?.length;
 
     const items = page.root.shadowRoot.querySelectorAll('md-list-item');
     // use sample entries as expectation
@@ -57,7 +69,7 @@ describe('rrk-mealplan-meal-list', () => {
     });
 
     const wlList = page.rootInstance as RrkMealplanMealList; //
-    const expectedPatients = wlList?.waitingPatients?.length;
+    const expectedPatients = wlList?.meals?.length;
 
     const errorMessage = page.root.shadowRoot.querySelectorAll('.error');
     const items = page.root.shadowRoot.querySelectorAll('md-list-item');

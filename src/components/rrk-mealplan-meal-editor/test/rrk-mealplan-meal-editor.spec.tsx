@@ -1,37 +1,23 @@
 import { newSpecPage } from '@stencil/core/testing';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { Condition, WaitingListEntry } from '../../../api/mealplan';
+import { Meal } from '../../../api/mealplan';
 import { RrkMealplanMealEditor } from '../rrk-mealplan-meal-editor';
 
 describe('rrk-mealplan-meal-editor', () => {
-  const sampleEntry: WaitingListEntry = {
+  const sampleEntry: Meal = {
     id: 'entry-1',
-    patientId: 'p-1',
-    name: 'Juraj Prvý',
-    waitingSince: '20240203T12:00',
-    estimatedDurationMinutes: 20,
-    condition: {
-      value: 'Nevoľnosť',
-      code: 'nausea',
-      reference: 'https://zdravoteka.sk/priznaky/nevolnost/',
+    allergens: ['nuts'],
+    ingredients: ['water', 'flour', 'nuts'],
+    name: 'Chlieb',
+    portionSize: '200',
+    nutrients: {
+      calories: 100,
+      carbohydrates: 10,
+      fats: 5,
+      proteins: 1,
     },
   };
-
-  const sampleConditions: Condition[] = [
-    {
-      value: 'Teploty',
-      code: 'subfebrilia',
-      reference: 'https://zdravoteka.sk/priznaky/zvysena-telesna-teplota/',
-      typicalDurationMinutes: 20,
-    },
-    {
-      value: 'Nevoľnosť',
-      code: 'nausea',
-      reference: 'https://zdravoteka.sk/priznaky/nevolnost/',
-      typicalDurationMinutes: 45,
-    },
-  ];
 
   let delay = async (miliseconds: number) =>
     await new Promise<void>(resolve => {
@@ -49,7 +35,6 @@ describe('rrk-mealplan-meal-editor', () => {
 
   it('buttons shall be of different type', async () => {
     mock.onGet(/^.*\/entries\/.+/).reply(200, sampleEntry);
-    mock.onGet(/^.*\/condition$/).reply(200, sampleConditions);
 
     const page = await newSpecPage({
       components: [RrkMealplanMealEditor],
@@ -70,7 +55,6 @@ describe('rrk-mealplan-meal-editor', () => {
 
   it('first text field is patient name', async () => {
     mock.onGet(/^.*\/entries\/.+/).reply(200, sampleEntry);
-    mock.onGet(/^.*\/condition$/).reply(200, sampleConditions);
 
     const page = await newSpecPage({
       components: [RrkMealplanMealEditor],

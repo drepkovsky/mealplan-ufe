@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * MealpLan API
- * Mealplan API
+ * Hospital Meal Plan Management API
+ * API to manage meals, patients, and their meal plans in a hospital.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: <your_email>
@@ -26,265 +26,182 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 /**
  * 
  * @export
- * @interface Ambulance
+ * @interface Meal
  */
-export interface Ambulance {
+export interface Meal {
     /**
-     * Unique identifier of the ambulance
+     * Unique identifier of the meal
      * @type {string}
-     * @memberof Ambulance
+     * @memberof Meal
      */
     'id': string;
     /**
-     * Human readable display name of the ambulance
+     * Name of the meal
      * @type {string}
-     * @memberof Ambulance
+     * @memberof Meal
      */
     'name': string;
     /**
      * 
+     * @type {MealNutrients}
+     * @memberof Meal
+     */
+    'nutrients': MealNutrients;
+    /**
+     * Size of a single portion
      * @type {string}
-     * @memberof Ambulance
+     * @memberof Meal
      */
-    'roomNumber': string;
+    'portionSize': string;
     /**
-     * 
-     * @type {Array<WaitingListEntry>}
-     * @memberof Ambulance
+     * List of potential allergens
+     * @type {Array<string>}
+     * @memberof Meal
      */
-    'waitingList'?: Array<WaitingListEntry>;
+    'allergens': Array<string>;
     /**
-     * 
-     * @type {Array<Condition>}
-     * @memberof Ambulance
+     * List of ingredients used in the meal
+     * @type {Array<string>}
+     * @memberof Meal
      */
-    'predefinedConditions'?: Array<Condition>;
+    'ingredients': Array<string>;
 }
 /**
- * Describes disease, symptoms, or other reasons of patient   visit
+ * Nutritional content per serving
  * @export
- * @interface Condition
+ * @interface MealNutrients
  */
-export interface Condition {
-    /**
-     * 
-     * @type {string}
-     * @memberof Condition
-     */
-    'value': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Condition
-     */
-    'code'?: string;
-    /**
-     * Link to encyclopedical explanation of the patient\'s condition
-     * @type {string}
-     * @memberof Condition
-     */
-    'reference'?: string;
+export interface MealNutrients {
     /**
      * 
      * @type {number}
-     * @memberof Condition
+     * @memberof MealNutrients
      */
-    'typicalDurationMinutes'?: number;
+    'fats'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MealNutrients
+     */
+    'carbohydrates'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MealNutrients
+     */
+    'proteins'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MealNutrients
+     */
+    'calories'?: number;
 }
 /**
  * 
  * @export
- * @interface WaitingListEntry
+ * @interface MealPlan
  */
-export interface WaitingListEntry {
+export interface MealPlan {
     /**
-     * Unique id of the entry in this waiting list
+     * Unique meal plan identifier
      * @type {string}
-     * @memberof WaitingListEntry
+     * @memberof MealPlan
      */
     'id': string;
     /**
-     * Name of patient in waiting list
+     * Date for which the meal plan is scheduled
      * @type {string}
-     * @memberof WaitingListEntry
+     * @memberof MealPlan
      */
-    'name'?: string;
+    'date': string;
     /**
-     * Unique identifier of the patient known to Web-In-Cloud system
+     * Reference to the patient
      * @type {string}
-     * @memberof WaitingListEntry
+     * @memberof MealPlan
      */
     'patientId': string;
     /**
-     * Timestamp since when the patient entered the waiting list
-     * @type {string}
-     * @memberof WaitingListEntry
+     * Meals included in the plan with scheduled times
+     * @type {Array<MealPlanMealsInner>}
+     * @memberof MealPlan
      */
-    'waitingSince': string;
-    /**
-     * Estimated time of entering ambulance. Ignored on post.
-     * @type {string}
-     * @memberof WaitingListEntry
-     */
-    'estimatedStart'?: string;
-    /**
-     * Estimated duration of ambulance visit. If not provided then it will be computed based on condition and ambulance settings
-     * @type {number}
-     * @memberof WaitingListEntry
-     */
-    'estimatedDurationMinutes': number;
+    'meals': Array<MealPlanMealsInner>;
+}
+/**
+ * 
+ * @export
+ * @interface MealPlanMealsInner
+ */
+export interface MealPlanMealsInner {
     /**
      * 
-     * @type {Condition}
-     * @memberof WaitingListEntry
+     * @type {string}
+     * @memberof MealPlanMealsInner
      */
-    'condition'?: Condition;
-}
-
-/**
- * AmbulanceConditionsApi - axios parameter creator
- * @export
- */
-export const AmbulanceConditionsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * By using ambulanceId you get list of predefined conditions
-         * @summary Provides the list of conditions associated with ambulance
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getConditions: async (ambulanceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ambulanceId' is not null or undefined
-            assertParamExists('getConditions', 'ambulanceId', ambulanceId)
-            const localVarPath = `/waiting-list/{ambulanceId}/condition`
-                .replace(`{${"ambulanceId"}}`, encodeURIComponent(String(ambulanceId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * AmbulanceConditionsApi - functional programming interface
- * @export
- */
-export const AmbulanceConditionsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AmbulanceConditionsApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * By using ambulanceId you get list of predefined conditions
-         * @summary Provides the list of conditions associated with ambulance
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getConditions(ambulanceId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Condition>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getConditions(ambulanceId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * AmbulanceConditionsApi - factory interface
- * @export
- */
-export const AmbulanceConditionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AmbulanceConditionsApiFp(configuration)
-    return {
-        /**
-         * By using ambulanceId you get list of predefined conditions
-         * @summary Provides the list of conditions associated with ambulance
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getConditions(ambulanceId: string, options?: any): AxiosPromise<Array<Condition>> {
-            return localVarFp.getConditions(ambulanceId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * AmbulanceConditionsApi - interface
- * @export
- * @interface AmbulanceConditionsApi
- */
-export interface AmbulanceConditionsApiInterface {
+    'mealId'?: string;
     /**
-     * By using ambulanceId you get list of predefined conditions
-     * @summary Provides the list of conditions associated with ambulance
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AmbulanceConditionsApiInterface
+     * 
+     * @type {string}
+     * @memberof MealPlanMealsInner
      */
-    getConditions(ambulanceId: string, options?: AxiosRequestConfig): AxiosPromise<Array<Condition>>;
-
+    'time'?: string;
 }
-
 /**
- * AmbulanceConditionsApi - object-oriented interface
+ * 
  * @export
- * @class AmbulanceConditionsApi
- * @extends {BaseAPI}
+ * @interface Patient
  */
-export class AmbulanceConditionsApi extends BaseAPI implements AmbulanceConditionsApiInterface {
+export interface Patient {
     /**
-     * By using ambulanceId you get list of predefined conditions
-     * @summary Provides the list of conditions associated with ambulance
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AmbulanceConditionsApi
+     * Full name of the patient
+     * @type {string}
+     * @memberof Patient
      */
-    public getConditions(ambulanceId: string, options?: AxiosRequestConfig) {
-        return AmbulanceConditionsApiFp(this.configuration).getConditions(ambulanceId, options).then((request) => request(this.axios, this.basePath));
-    }
+    'fullName': string;
+    /**
+     * Unique identifier for the patient
+     * @type {string}
+     * @memberof Patient
+     */
+    'patientId': string;
+    /**
+     * Age of the patient
+     * @type {number}
+     * @memberof Patient
+     */
+    'age': number;
+    /**
+     * List of patient\'s allergens
+     * @type {Array<string>}
+     * @memberof Patient
+     */
+    'allergens': Array<string>;
+    /**
+     * List of preferred ingredients for the patient
+     * @type {Array<string>}
+     * @memberof Patient
+     */
+    'ingredientPreferences': Array<string>;
 }
 
-
 /**
- * AmbulanceWaitingListApi - axios parameter creator
+ * MealPlansApi - axios parameter creator
  * @export
  */
-export const AmbulanceWaitingListApiAxiosParamCreator = function (configuration?: Configuration) {
+export const MealPlansApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Use this method to store new entry into the waiting list.
-         * @summary Saves new entry into waiting list
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {WaitingListEntry} waitingListEntry Waiting list entry to store
+         * 
+         * @summary Creates a new meal plan
+         * @param {MealPlan} mealPlan Data for a new meal plan
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWaitingListEntry: async (ambulanceId: string, waitingListEntry: WaitingListEntry, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ambulanceId' is not null or undefined
-            assertParamExists('createWaitingListEntry', 'ambulanceId', ambulanceId)
-            // verify required parameter 'waitingListEntry' is not null or undefined
-            assertParamExists('createWaitingListEntry', 'waitingListEntry', waitingListEntry)
-            const localVarPath = `/waiting-list/{ambulanceId}/entries`
-                .replace(`{${"ambulanceId"}}`, encodeURIComponent(String(ambulanceId)));
+        createMealPlan: async (mealPlan: MealPlan, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mealPlan' is not null or undefined
+            assertParamExists('createMealPlan', 'mealPlan', mealPlan)
+            const localVarPath = `/meal-plans`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -303,7 +220,7 @@ export const AmbulanceWaitingListApiAxiosParamCreator = function (configuration?
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(waitingListEntry, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(mealPlan, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -311,21 +228,17 @@ export const AmbulanceWaitingListApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * Use this method to delete the specific entry from the waiting list.
-         * @summary Deletes specific entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * 
+         * @summary Delete a meal plan by ID
+         * @param {string} mealPlanId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWaitingListEntry: async (ambulanceId: string, entryId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ambulanceId' is not null or undefined
-            assertParamExists('deleteWaitingListEntry', 'ambulanceId', ambulanceId)
-            // verify required parameter 'entryId' is not null or undefined
-            assertParamExists('deleteWaitingListEntry', 'entryId', entryId)
-            const localVarPath = `/waiting-list/{ambulanceId}/entries/{entryId}`
-                .replace(`{${"ambulanceId"}}`, encodeURIComponent(String(ambulanceId)))
-                .replace(`{${"entryId"}}`, encodeURIComponent(String(entryId)));
+        deleteMealPlan: async (mealPlanId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mealPlanId' is not null or undefined
+            assertParamExists('deleteMealPlan', 'mealPlanId', mealPlanId)
+            const localVarPath = `/meal-plans/{mealPlanId}`
+                .replace(`{${"mealPlanId"}}`, encodeURIComponent(String(mealPlanId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -349,17 +262,17 @@ export const AmbulanceWaitingListApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * By using ambulanceId you get list of entries in ambulance waiting list
-         * @summary Provides the ambulance waiting list
-         * @param {string} ambulanceId pass the id of the particular ambulance
+         * 
+         * @summary Get a meal plan by ID
+         * @param {string} mealPlanId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWaitingListEntries: async (ambulanceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ambulanceId' is not null or undefined
-            assertParamExists('getWaitingListEntries', 'ambulanceId', ambulanceId)
-            const localVarPath = `/waiting-list/{ambulanceId}/entries`
-                .replace(`{${"ambulanceId"}}`, encodeURIComponent(String(ambulanceId)));
+        getMealPlan: async (mealPlanId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mealPlanId' is not null or undefined
+            assertParamExists('getMealPlan', 'mealPlanId', mealPlanId)
+            const localVarPath = `/meal-plans/{mealPlanId}`
+                .replace(`{${"mealPlanId"}}`, encodeURIComponent(String(mealPlanId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -383,21 +296,13 @@ export const AmbulanceWaitingListApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * By using ambulanceId and entryId you can details of particular entry item ambulance.
-         * @summary Provides details about waiting list entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * 
+         * @summary List all meal plans
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWaitingListEntry: async (ambulanceId: string, entryId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ambulanceId' is not null or undefined
-            assertParamExists('getWaitingListEntry', 'ambulanceId', ambulanceId)
-            // verify required parameter 'entryId' is not null or undefined
-            assertParamExists('getWaitingListEntry', 'entryId', entryId)
-            const localVarPath = `/waiting-list/{ambulanceId}/entries/{entryId}`
-                .replace(`{${"ambulanceId"}}`, encodeURIComponent(String(ambulanceId)))
-                .replace(`{${"entryId"}}`, encodeURIComponent(String(entryId)));
+        listMealPlans: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/meal-plans`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -421,24 +326,20 @@ export const AmbulanceWaitingListApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * Use this method to update content of the waiting list entry.
-         * @summary Updates specific entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
-         * @param {WaitingListEntry} waitingListEntry Waiting list entry to update
+         * 
+         * @summary Update a meal plan by ID
+         * @param {string} mealPlanId 
+         * @param {MealPlan} mealPlan Data for updating a meal plan
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateWaitingListEntry: async (ambulanceId: string, entryId: string, waitingListEntry: WaitingListEntry, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ambulanceId' is not null or undefined
-            assertParamExists('updateWaitingListEntry', 'ambulanceId', ambulanceId)
-            // verify required parameter 'entryId' is not null or undefined
-            assertParamExists('updateWaitingListEntry', 'entryId', entryId)
-            // verify required parameter 'waitingListEntry' is not null or undefined
-            assertParamExists('updateWaitingListEntry', 'waitingListEntry', waitingListEntry)
-            const localVarPath = `/waiting-list/{ambulanceId}/entries/{entryId}`
-                .replace(`{${"ambulanceId"}}`, encodeURIComponent(String(ambulanceId)))
-                .replace(`{${"entryId"}}`, encodeURIComponent(String(entryId)));
+        updateMealPlan: async (mealPlanId: string, mealPlan: MealPlan, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mealPlanId' is not null or undefined
+            assertParamExists('updateMealPlan', 'mealPlanId', mealPlanId)
+            // verify required parameter 'mealPlan' is not null or undefined
+            assertParamExists('updateMealPlan', 'mealPlan', mealPlan)
+            const localVarPath = `/meal-plans/{mealPlanId}`
+                .replace(`{${"mealPlanId"}}`, encodeURIComponent(String(mealPlanId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -457,7 +358,7 @@ export const AmbulanceWaitingListApiAxiosParamCreator = function (configuration?
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(waitingListEntry, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(mealPlan, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -468,294 +369,274 @@ export const AmbulanceWaitingListApiAxiosParamCreator = function (configuration?
 };
 
 /**
- * AmbulanceWaitingListApi - functional programming interface
+ * MealPlansApi - functional programming interface
  * @export
  */
-export const AmbulanceWaitingListApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AmbulanceWaitingListApiAxiosParamCreator(configuration)
+export const MealPlansApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MealPlansApiAxiosParamCreator(configuration)
     return {
         /**
-         * Use this method to store new entry into the waiting list.
-         * @summary Saves new entry into waiting list
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {WaitingListEntry} waitingListEntry Waiting list entry to store
+         * 
+         * @summary Creates a new meal plan
+         * @param {MealPlan} mealPlan Data for a new meal plan
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createWaitingListEntry(ambulanceId: string, waitingListEntry: WaitingListEntry, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WaitingListEntry>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createWaitingListEntry(ambulanceId, waitingListEntry, options);
+        async createMealPlan(mealPlan: MealPlan, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MealPlan>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMealPlan(mealPlan, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Use this method to delete the specific entry from the waiting list.
-         * @summary Deletes specific entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * 
+         * @summary Delete a meal plan by ID
+         * @param {string} mealPlanId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteWaitingListEntry(ambulanceId: string, entryId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteWaitingListEntry(ambulanceId, entryId, options);
+        async deleteMealPlan(mealPlanId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMealPlan(mealPlanId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * By using ambulanceId you get list of entries in ambulance waiting list
-         * @summary Provides the ambulance waiting list
-         * @param {string} ambulanceId pass the id of the particular ambulance
+         * 
+         * @summary Get a meal plan by ID
+         * @param {string} mealPlanId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWaitingListEntries(ambulanceId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WaitingListEntry>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getWaitingListEntries(ambulanceId, options);
+        async getMealPlan(mealPlanId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MealPlan>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMealPlan(mealPlanId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * By using ambulanceId and entryId you can details of particular entry item ambulance.
-         * @summary Provides details about waiting list entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * 
+         * @summary List all meal plans
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWaitingListEntry(ambulanceId: string, entryId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WaitingListEntry>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getWaitingListEntry(ambulanceId, entryId, options);
+        async listMealPlans(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MealPlan>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listMealPlans(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Use this method to update content of the waiting list entry.
-         * @summary Updates specific entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
-         * @param {WaitingListEntry} waitingListEntry Waiting list entry to update
+         * 
+         * @summary Update a meal plan by ID
+         * @param {string} mealPlanId 
+         * @param {MealPlan} mealPlan Data for updating a meal plan
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateWaitingListEntry(ambulanceId: string, entryId: string, waitingListEntry: WaitingListEntry, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WaitingListEntry>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateWaitingListEntry(ambulanceId, entryId, waitingListEntry, options);
+        async updateMealPlan(mealPlanId: string, mealPlan: MealPlan, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMealPlan(mealPlanId, mealPlan, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * AmbulanceWaitingListApi - factory interface
+ * MealPlansApi - factory interface
  * @export
  */
-export const AmbulanceWaitingListApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AmbulanceWaitingListApiFp(configuration)
+export const MealPlansApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MealPlansApiFp(configuration)
     return {
         /**
-         * Use this method to store new entry into the waiting list.
-         * @summary Saves new entry into waiting list
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {WaitingListEntry} waitingListEntry Waiting list entry to store
+         * 
+         * @summary Creates a new meal plan
+         * @param {MealPlan} mealPlan Data for a new meal plan
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWaitingListEntry(ambulanceId: string, waitingListEntry: WaitingListEntry, options?: any): AxiosPromise<WaitingListEntry> {
-            return localVarFp.createWaitingListEntry(ambulanceId, waitingListEntry, options).then((request) => request(axios, basePath));
+        createMealPlan(mealPlan: MealPlan, options?: any): AxiosPromise<MealPlan> {
+            return localVarFp.createMealPlan(mealPlan, options).then((request) => request(axios, basePath));
         },
         /**
-         * Use this method to delete the specific entry from the waiting list.
-         * @summary Deletes specific entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * 
+         * @summary Delete a meal plan by ID
+         * @param {string} mealPlanId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWaitingListEntry(ambulanceId: string, entryId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteWaitingListEntry(ambulanceId, entryId, options).then((request) => request(axios, basePath));
+        deleteMealPlan(mealPlanId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteMealPlan(mealPlanId, options).then((request) => request(axios, basePath));
         },
         /**
-         * By using ambulanceId you get list of entries in ambulance waiting list
-         * @summary Provides the ambulance waiting list
-         * @param {string} ambulanceId pass the id of the particular ambulance
+         * 
+         * @summary Get a meal plan by ID
+         * @param {string} mealPlanId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWaitingListEntries(ambulanceId: string, options?: any): AxiosPromise<Array<WaitingListEntry>> {
-            return localVarFp.getWaitingListEntries(ambulanceId, options).then((request) => request(axios, basePath));
+        getMealPlan(mealPlanId: string, options?: any): AxiosPromise<MealPlan> {
+            return localVarFp.getMealPlan(mealPlanId, options).then((request) => request(axios, basePath));
         },
         /**
-         * By using ambulanceId and entryId you can details of particular entry item ambulance.
-         * @summary Provides details about waiting list entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
+         * 
+         * @summary List all meal plans
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWaitingListEntry(ambulanceId: string, entryId: string, options?: any): AxiosPromise<WaitingListEntry> {
-            return localVarFp.getWaitingListEntry(ambulanceId, entryId, options).then((request) => request(axios, basePath));
+        listMealPlans(options?: any): AxiosPromise<Array<MealPlan>> {
+            return localVarFp.listMealPlans(options).then((request) => request(axios, basePath));
         },
         /**
-         * Use this method to update content of the waiting list entry.
-         * @summary Updates specific entry
-         * @param {string} ambulanceId pass the id of the particular ambulance
-         * @param {string} entryId pass the id of the particular entry in the waiting list
-         * @param {WaitingListEntry} waitingListEntry Waiting list entry to update
+         * 
+         * @summary Update a meal plan by ID
+         * @param {string} mealPlanId 
+         * @param {MealPlan} mealPlan Data for updating a meal plan
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateWaitingListEntry(ambulanceId: string, entryId: string, waitingListEntry: WaitingListEntry, options?: any): AxiosPromise<WaitingListEntry> {
-            return localVarFp.updateWaitingListEntry(ambulanceId, entryId, waitingListEntry, options).then((request) => request(axios, basePath));
+        updateMealPlan(mealPlanId: string, mealPlan: MealPlan, options?: any): AxiosPromise<void> {
+            return localVarFp.updateMealPlan(mealPlanId, mealPlan, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * AmbulanceWaitingListApi - interface
+ * MealPlansApi - interface
  * @export
- * @interface AmbulanceWaitingListApi
+ * @interface MealPlansApi
  */
-export interface AmbulanceWaitingListApiInterface {
+export interface MealPlansApiInterface {
     /**
-     * Use this method to store new entry into the waiting list.
-     * @summary Saves new entry into waiting list
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {WaitingListEntry} waitingListEntry Waiting list entry to store
+     * 
+     * @summary Creates a new meal plan
+     * @param {MealPlan} mealPlan Data for a new meal plan
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApiInterface
+     * @memberof MealPlansApiInterface
      */
-    createWaitingListEntry(ambulanceId: string, waitingListEntry: WaitingListEntry, options?: AxiosRequestConfig): AxiosPromise<WaitingListEntry>;
+    createMealPlan(mealPlan: MealPlan, options?: AxiosRequestConfig): AxiosPromise<MealPlan>;
 
     /**
-     * Use this method to delete the specific entry from the waiting list.
-     * @summary Deletes specific entry
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {string} entryId pass the id of the particular entry in the waiting list
+     * 
+     * @summary Delete a meal plan by ID
+     * @param {string} mealPlanId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApiInterface
+     * @memberof MealPlansApiInterface
      */
-    deleteWaitingListEntry(ambulanceId: string, entryId: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+    deleteMealPlan(mealPlanId: string, options?: AxiosRequestConfig): AxiosPromise<void>;
 
     /**
-     * By using ambulanceId you get list of entries in ambulance waiting list
-     * @summary Provides the ambulance waiting list
-     * @param {string} ambulanceId pass the id of the particular ambulance
+     * 
+     * @summary Get a meal plan by ID
+     * @param {string} mealPlanId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApiInterface
+     * @memberof MealPlansApiInterface
      */
-    getWaitingListEntries(ambulanceId: string, options?: AxiosRequestConfig): AxiosPromise<Array<WaitingListEntry>>;
+    getMealPlan(mealPlanId: string, options?: AxiosRequestConfig): AxiosPromise<MealPlan>;
 
     /**
-     * By using ambulanceId and entryId you can details of particular entry item ambulance.
-     * @summary Provides details about waiting list entry
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {string} entryId pass the id of the particular entry in the waiting list
+     * 
+     * @summary List all meal plans
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApiInterface
+     * @memberof MealPlansApiInterface
      */
-    getWaitingListEntry(ambulanceId: string, entryId: string, options?: AxiosRequestConfig): AxiosPromise<WaitingListEntry>;
+    listMealPlans(options?: AxiosRequestConfig): AxiosPromise<Array<MealPlan>>;
 
     /**
-     * Use this method to update content of the waiting list entry.
-     * @summary Updates specific entry
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {string} entryId pass the id of the particular entry in the waiting list
-     * @param {WaitingListEntry} waitingListEntry Waiting list entry to update
+     * 
+     * @summary Update a meal plan by ID
+     * @param {string} mealPlanId 
+     * @param {MealPlan} mealPlan Data for updating a meal plan
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApiInterface
+     * @memberof MealPlansApiInterface
      */
-    updateWaitingListEntry(ambulanceId: string, entryId: string, waitingListEntry: WaitingListEntry, options?: AxiosRequestConfig): AxiosPromise<WaitingListEntry>;
+    updateMealPlan(mealPlanId: string, mealPlan: MealPlan, options?: AxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
- * AmbulanceWaitingListApi - object-oriented interface
+ * MealPlansApi - object-oriented interface
  * @export
- * @class AmbulanceWaitingListApi
+ * @class MealPlansApi
  * @extends {BaseAPI}
  */
-export class AmbulanceWaitingListApi extends BaseAPI implements AmbulanceWaitingListApiInterface {
+export class MealPlansApi extends BaseAPI implements MealPlansApiInterface {
     /**
-     * Use this method to store new entry into the waiting list.
-     * @summary Saves new entry into waiting list
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {WaitingListEntry} waitingListEntry Waiting list entry to store
+     * 
+     * @summary Creates a new meal plan
+     * @param {MealPlan} mealPlan Data for a new meal plan
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApi
+     * @memberof MealPlansApi
      */
-    public createWaitingListEntry(ambulanceId: string, waitingListEntry: WaitingListEntry, options?: AxiosRequestConfig) {
-        return AmbulanceWaitingListApiFp(this.configuration).createWaitingListEntry(ambulanceId, waitingListEntry, options).then((request) => request(this.axios, this.basePath));
+    public createMealPlan(mealPlan: MealPlan, options?: AxiosRequestConfig) {
+        return MealPlansApiFp(this.configuration).createMealPlan(mealPlan, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Use this method to delete the specific entry from the waiting list.
-     * @summary Deletes specific entry
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {string} entryId pass the id of the particular entry in the waiting list
+     * 
+     * @summary Delete a meal plan by ID
+     * @param {string} mealPlanId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApi
+     * @memberof MealPlansApi
      */
-    public deleteWaitingListEntry(ambulanceId: string, entryId: string, options?: AxiosRequestConfig) {
-        return AmbulanceWaitingListApiFp(this.configuration).deleteWaitingListEntry(ambulanceId, entryId, options).then((request) => request(this.axios, this.basePath));
+    public deleteMealPlan(mealPlanId: string, options?: AxiosRequestConfig) {
+        return MealPlansApiFp(this.configuration).deleteMealPlan(mealPlanId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * By using ambulanceId you get list of entries in ambulance waiting list
-     * @summary Provides the ambulance waiting list
-     * @param {string} ambulanceId pass the id of the particular ambulance
+     * 
+     * @summary Get a meal plan by ID
+     * @param {string} mealPlanId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApi
+     * @memberof MealPlansApi
      */
-    public getWaitingListEntries(ambulanceId: string, options?: AxiosRequestConfig) {
-        return AmbulanceWaitingListApiFp(this.configuration).getWaitingListEntries(ambulanceId, options).then((request) => request(this.axios, this.basePath));
+    public getMealPlan(mealPlanId: string, options?: AxiosRequestConfig) {
+        return MealPlansApiFp(this.configuration).getMealPlan(mealPlanId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * By using ambulanceId and entryId you can details of particular entry item ambulance.
-     * @summary Provides details about waiting list entry
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {string} entryId pass the id of the particular entry in the waiting list
+     * 
+     * @summary List all meal plans
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApi
+     * @memberof MealPlansApi
      */
-    public getWaitingListEntry(ambulanceId: string, entryId: string, options?: AxiosRequestConfig) {
-        return AmbulanceWaitingListApiFp(this.configuration).getWaitingListEntry(ambulanceId, entryId, options).then((request) => request(this.axios, this.basePath));
+    public listMealPlans(options?: AxiosRequestConfig) {
+        return MealPlansApiFp(this.configuration).listMealPlans(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Use this method to update content of the waiting list entry.
-     * @summary Updates specific entry
-     * @param {string} ambulanceId pass the id of the particular ambulance
-     * @param {string} entryId pass the id of the particular entry in the waiting list
-     * @param {WaitingListEntry} waitingListEntry Waiting list entry to update
+     * 
+     * @summary Update a meal plan by ID
+     * @param {string} mealPlanId 
+     * @param {MealPlan} mealPlan Data for updating a meal plan
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulanceWaitingListApi
+     * @memberof MealPlansApi
      */
-    public updateWaitingListEntry(ambulanceId: string, entryId: string, waitingListEntry: WaitingListEntry, options?: AxiosRequestConfig) {
-        return AmbulanceWaitingListApiFp(this.configuration).updateWaitingListEntry(ambulanceId, entryId, waitingListEntry, options).then((request) => request(this.axios, this.basePath));
+    public updateMealPlan(mealPlanId: string, mealPlan: MealPlan, options?: AxiosRequestConfig) {
+        return MealPlansApiFp(this.configuration).updateMealPlan(mealPlanId, mealPlan, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 /**
- * AmbulancesApi - axios parameter creator
+ * MealsApi - axios parameter creator
  * @export
  */
-export const AmbulancesApiAxiosParamCreator = function (configuration?: Configuration) {
+export const MealsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Use this method to initialize new ambulance in the system
-         * @summary Saves new ambulance definition
-         * @param {Ambulance} ambulance Ambulance details to store
+         * 
+         * @summary Creates a new meal
+         * @param {Meal} meal Data for a new meal
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createAmbulance: async (ambulance: Ambulance, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ambulance' is not null or undefined
-            assertParamExists('createAmbulance', 'ambulance', ambulance)
-            const localVarPath = `/ambulance`;
+        createMeal: async (meal: Meal, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'meal' is not null or undefined
+            assertParamExists('createMeal', 'meal', meal)
+            const localVarPath = `/meals`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -774,7 +655,7 @@ export const AmbulancesApiAxiosParamCreator = function (configuration?: Configur
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(ambulance, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(meal, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -782,17 +663,17 @@ export const AmbulancesApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Use this method to delete the specific ambulance from the system.
-         * @summary Deletes specific ambulance
-         * @param {string} ambulanceId pass the id of the particular ambulance
+         * 
+         * @summary Delete a meal by ID
+         * @param {string} mealId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAmbulance: async (ambulanceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'ambulanceId' is not null or undefined
-            assertParamExists('deleteAmbulance', 'ambulanceId', ambulanceId)
-            const localVarPath = `/ambulance/{ambulanceId}`
-                .replace(`{${"ambulanceId"}}`, encodeURIComponent(String(ambulanceId)));
+        deleteMeal: async (mealId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mealId' is not null or undefined
+            assertParamExists('deleteMeal', 'mealId', mealId)
+            const localVarPath = `/meals/{mealId}`
+                .replace(`{${"mealId"}}`, encodeURIComponent(String(mealId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -815,128 +696,796 @@ export const AmbulancesApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Get a meal by ID
+         * @param {string} mealId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMeal: async (mealId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mealId' is not null or undefined
+            assertParamExists('getMeal', 'mealId', mealId)
+            const localVarPath = `/meals/{mealId}`
+                .replace(`{${"mealId"}}`, encodeURIComponent(String(mealId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List all meals
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMeals: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/meals`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update a meal by ID
+         * @param {string} mealId 
+         * @param {Meal} meal Data for updating a meal
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateMeal: async (mealId: string, meal: Meal, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mealId' is not null or undefined
+            assertParamExists('updateMeal', 'mealId', mealId)
+            // verify required parameter 'meal' is not null or undefined
+            assertParamExists('updateMeal', 'meal', meal)
+            const localVarPath = `/meals/{mealId}`
+                .replace(`{${"mealId"}}`, encodeURIComponent(String(mealId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(meal, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
 /**
- * AmbulancesApi - functional programming interface
+ * MealsApi - functional programming interface
  * @export
  */
-export const AmbulancesApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AmbulancesApiAxiosParamCreator(configuration)
+export const MealsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MealsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Use this method to initialize new ambulance in the system
-         * @summary Saves new ambulance definition
-         * @param {Ambulance} ambulance Ambulance details to store
+         * 
+         * @summary Creates a new meal
+         * @param {Meal} meal Data for a new meal
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createAmbulance(ambulance: Ambulance, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Ambulance>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createAmbulance(ambulance, options);
+        async createMeal(meal: Meal, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Meal>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMeal(meal, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Use this method to delete the specific ambulance from the system.
-         * @summary Deletes specific ambulance
-         * @param {string} ambulanceId pass the id of the particular ambulance
+         * 
+         * @summary Delete a meal by ID
+         * @param {string} mealId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteAmbulance(ambulanceId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAmbulance(ambulanceId, options);
+        async deleteMeal(mealId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMeal(mealId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a meal by ID
+         * @param {string} mealId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMeal(mealId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Meal>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMeal(mealId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary List all meals
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listMeals(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Meal>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listMeals(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update a meal by ID
+         * @param {string} mealId 
+         * @param {Meal} meal Data for updating a meal
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateMeal(mealId: string, meal: Meal, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMeal(mealId, meal, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * AmbulancesApi - factory interface
+ * MealsApi - factory interface
  * @export
  */
-export const AmbulancesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AmbulancesApiFp(configuration)
+export const MealsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MealsApiFp(configuration)
     return {
         /**
-         * Use this method to initialize new ambulance in the system
-         * @summary Saves new ambulance definition
-         * @param {Ambulance} ambulance Ambulance details to store
+         * 
+         * @summary Creates a new meal
+         * @param {Meal} meal Data for a new meal
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createAmbulance(ambulance: Ambulance, options?: any): AxiosPromise<Ambulance> {
-            return localVarFp.createAmbulance(ambulance, options).then((request) => request(axios, basePath));
+        createMeal(meal: Meal, options?: any): AxiosPromise<Meal> {
+            return localVarFp.createMeal(meal, options).then((request) => request(axios, basePath));
         },
         /**
-         * Use this method to delete the specific ambulance from the system.
-         * @summary Deletes specific ambulance
-         * @param {string} ambulanceId pass the id of the particular ambulance
+         * 
+         * @summary Delete a meal by ID
+         * @param {string} mealId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAmbulance(ambulanceId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteAmbulance(ambulanceId, options).then((request) => request(axios, basePath));
+        deleteMeal(mealId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteMeal(mealId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a meal by ID
+         * @param {string} mealId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMeal(mealId: string, options?: any): AxiosPromise<Meal> {
+            return localVarFp.getMeal(mealId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List all meals
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMeals(options?: any): AxiosPromise<Array<Meal>> {
+            return localVarFp.listMeals(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update a meal by ID
+         * @param {string} mealId 
+         * @param {Meal} meal Data for updating a meal
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateMeal(mealId: string, meal: Meal, options?: any): AxiosPromise<void> {
+            return localVarFp.updateMeal(mealId, meal, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * AmbulancesApi - interface
+ * MealsApi - interface
  * @export
- * @interface AmbulancesApi
+ * @interface MealsApi
  */
-export interface AmbulancesApiInterface {
+export interface MealsApiInterface {
     /**
-     * Use this method to initialize new ambulance in the system
-     * @summary Saves new ambulance definition
-     * @param {Ambulance} ambulance Ambulance details to store
+     * 
+     * @summary Creates a new meal
+     * @param {Meal} meal Data for a new meal
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulancesApiInterface
+     * @memberof MealsApiInterface
      */
-    createAmbulance(ambulance: Ambulance, options?: AxiosRequestConfig): AxiosPromise<Ambulance>;
+    createMeal(meal: Meal, options?: AxiosRequestConfig): AxiosPromise<Meal>;
 
     /**
-     * Use this method to delete the specific ambulance from the system.
-     * @summary Deletes specific ambulance
-     * @param {string} ambulanceId pass the id of the particular ambulance
+     * 
+     * @summary Delete a meal by ID
+     * @param {string} mealId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulancesApiInterface
+     * @memberof MealsApiInterface
      */
-    deleteAmbulance(ambulanceId: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+    deleteMeal(mealId: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Get a meal by ID
+     * @param {string} mealId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MealsApiInterface
+     */
+    getMeal(mealId: string, options?: AxiosRequestConfig): AxiosPromise<Meal>;
+
+    /**
+     * 
+     * @summary List all meals
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MealsApiInterface
+     */
+    listMeals(options?: AxiosRequestConfig): AxiosPromise<Array<Meal>>;
+
+    /**
+     * 
+     * @summary Update a meal by ID
+     * @param {string} mealId 
+     * @param {Meal} meal Data for updating a meal
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MealsApiInterface
+     */
+    updateMeal(mealId: string, meal: Meal, options?: AxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
- * AmbulancesApi - object-oriented interface
+ * MealsApi - object-oriented interface
  * @export
- * @class AmbulancesApi
+ * @class MealsApi
  * @extends {BaseAPI}
  */
-export class AmbulancesApi extends BaseAPI implements AmbulancesApiInterface {
+export class MealsApi extends BaseAPI implements MealsApiInterface {
     /**
-     * Use this method to initialize new ambulance in the system
-     * @summary Saves new ambulance definition
-     * @param {Ambulance} ambulance Ambulance details to store
+     * 
+     * @summary Creates a new meal
+     * @param {Meal} meal Data for a new meal
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulancesApi
+     * @memberof MealsApi
      */
-    public createAmbulance(ambulance: Ambulance, options?: AxiosRequestConfig) {
-        return AmbulancesApiFp(this.configuration).createAmbulance(ambulance, options).then((request) => request(this.axios, this.basePath));
+    public createMeal(meal: Meal, options?: AxiosRequestConfig) {
+        return MealsApiFp(this.configuration).createMeal(meal, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Use this method to delete the specific ambulance from the system.
-     * @summary Deletes specific ambulance
-     * @param {string} ambulanceId pass the id of the particular ambulance
+     * 
+     * @summary Delete a meal by ID
+     * @param {string} mealId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AmbulancesApi
+     * @memberof MealsApi
      */
-    public deleteAmbulance(ambulanceId: string, options?: AxiosRequestConfig) {
-        return AmbulancesApiFp(this.configuration).deleteAmbulance(ambulanceId, options).then((request) => request(this.axios, this.basePath));
+    public deleteMeal(mealId: string, options?: AxiosRequestConfig) {
+        return MealsApiFp(this.configuration).deleteMeal(mealId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a meal by ID
+     * @param {string} mealId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MealsApi
+     */
+    public getMeal(mealId: string, options?: AxiosRequestConfig) {
+        return MealsApiFp(this.configuration).getMeal(mealId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List all meals
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MealsApi
+     */
+    public listMeals(options?: AxiosRequestConfig) {
+        return MealsApiFp(this.configuration).listMeals(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update a meal by ID
+     * @param {string} mealId 
+     * @param {Meal} meal Data for updating a meal
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MealsApi
+     */
+    public updateMeal(mealId: string, meal: Meal, options?: AxiosRequestConfig) {
+        return MealsApiFp(this.configuration).updateMeal(mealId, meal, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * PatientsApi - axios parameter creator
+ * @export
+ */
+export const PatientsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Creates a new patient
+         * @param {Patient} patient Data for a new patient
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createPatient: async (patient: Patient, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patient' is not null or undefined
+            assertParamExists('createPatient', 'patient', patient)
+            const localVarPath = `/patients`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patient, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete a patient by ID
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePatient: async (patientId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patientId' is not null or undefined
+            assertParamExists('deletePatient', 'patientId', patientId)
+            const localVarPath = `/patients/{patientId}`
+                .replace(`{${"patientId"}}`, encodeURIComponent(String(patientId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a patient by ID
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPatient: async (patientId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patientId' is not null or undefined
+            assertParamExists('getPatient', 'patientId', patientId)
+            const localVarPath = `/patients/{patientId}`
+                .replace(`{${"patientId"}}`, encodeURIComponent(String(patientId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List all patients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPatients: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/patients`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update a patient by ID
+         * @param {string} patientId 
+         * @param {Patient} patient Data for updating a patient
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePatient: async (patientId: string, patient: Patient, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patientId' is not null or undefined
+            assertParamExists('updatePatient', 'patientId', patientId)
+            // verify required parameter 'patient' is not null or undefined
+            assertParamExists('updatePatient', 'patient', patient)
+            const localVarPath = `/patients/{patientId}`
+                .replace(`{${"patientId"}}`, encodeURIComponent(String(patientId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patient, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PatientsApi - functional programming interface
+ * @export
+ */
+export const PatientsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PatientsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Creates a new patient
+         * @param {Patient} patient Data for a new patient
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createPatient(patient: Patient, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Patient>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createPatient(patient, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Delete a patient by ID
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePatient(patientId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePatient(patientId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a patient by ID
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPatient(patientId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Patient>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPatient(patientId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary List all patients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPatients(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Patient>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listPatients(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update a patient by ID
+         * @param {string} patientId 
+         * @param {Patient} patient Data for updating a patient
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updatePatient(patientId: string, patient: Patient, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePatient(patientId, patient, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * PatientsApi - factory interface
+ * @export
+ */
+export const PatientsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PatientsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Creates a new patient
+         * @param {Patient} patient Data for a new patient
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createPatient(patient: Patient, options?: any): AxiosPromise<Patient> {
+            return localVarFp.createPatient(patient, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete a patient by ID
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePatient(patientId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deletePatient(patientId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a patient by ID
+         * @param {string} patientId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPatient(patientId: string, options?: any): AxiosPromise<Patient> {
+            return localVarFp.getPatient(patientId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary List all patients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPatients(options?: any): AxiosPromise<Array<Patient>> {
+            return localVarFp.listPatients(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update a patient by ID
+         * @param {string} patientId 
+         * @param {Patient} patient Data for updating a patient
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePatient(patientId: string, patient: Patient, options?: any): AxiosPromise<void> {
+            return localVarFp.updatePatient(patientId, patient, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PatientsApi - interface
+ * @export
+ * @interface PatientsApi
+ */
+export interface PatientsApiInterface {
+    /**
+     * 
+     * @summary Creates a new patient
+     * @param {Patient} patient Data for a new patient
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApiInterface
+     */
+    createPatient(patient: Patient, options?: AxiosRequestConfig): AxiosPromise<Patient>;
+
+    /**
+     * 
+     * @summary Delete a patient by ID
+     * @param {string} patientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApiInterface
+     */
+    deletePatient(patientId: string, options?: AxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Get a patient by ID
+     * @param {string} patientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApiInterface
+     */
+    getPatient(patientId: string, options?: AxiosRequestConfig): AxiosPromise<Patient>;
+
+    /**
+     * 
+     * @summary List all patients
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApiInterface
+     */
+    listPatients(options?: AxiosRequestConfig): AxiosPromise<Array<Patient>>;
+
+    /**
+     * 
+     * @summary Update a patient by ID
+     * @param {string} patientId 
+     * @param {Patient} patient Data for updating a patient
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApiInterface
+     */
+    updatePatient(patientId: string, patient: Patient, options?: AxiosRequestConfig): AxiosPromise<void>;
+
+}
+
+/**
+ * PatientsApi - object-oriented interface
+ * @export
+ * @class PatientsApi
+ * @extends {BaseAPI}
+ */
+export class PatientsApi extends BaseAPI implements PatientsApiInterface {
+    /**
+     * 
+     * @summary Creates a new patient
+     * @param {Patient} patient Data for a new patient
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApi
+     */
+    public createPatient(patient: Patient, options?: AxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).createPatient(patient, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete a patient by ID
+     * @param {string} patientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApi
+     */
+    public deletePatient(patientId: string, options?: AxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).deletePatient(patientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a patient by ID
+     * @param {string} patientId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApi
+     */
+    public getPatient(patientId: string, options?: AxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).getPatient(patientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary List all patients
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApi
+     */
+    public listPatients(options?: AxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).listPatients(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update a patient by ID
+     * @param {string} patientId 
+     * @param {Patient} patient Data for updating a patient
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PatientsApi
+     */
+    public updatePatient(patientId: string, patient: Patient, options?: AxiosRequestConfig) {
+        return PatientsApiFp(this.configuration).updatePatient(patientId, patient, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

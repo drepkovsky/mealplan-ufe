@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { AmbulanceWaitingListApiFactory } from '../../api/mealplan';
+import { Meal, MealsApiFactory } from '../../api/mealplan';
 
 @Component({
   tag: 'rrk-mealplan-meal-list',
@@ -7,16 +7,15 @@ import { AmbulanceWaitingListApiFactory } from '../../api/mealplan';
   shadow: true,
 })
 export class RrkMealplanMealList {
-  waitingPatients: any[];
+  meals: Meal[];
 
   @Event({ eventName: 'entry-clicked' }) entryClicked: EventEmitter<string>;
   @Prop() apiBase: string;
-  @Prop() ambulanceId: string;
   @State() errorMessage: string;
 
   private async getWaitingPatientsAsync() {
     try {
-      const response = await AmbulanceWaitingListApiFactory(undefined, this.apiBase).getWaitingListEntries(this.ambulanceId);
+      const response = await MealsApiFactory(undefined, this.apiBase).listMeals();
       if (response.status < 299) {
         return response.data;
       } else {
@@ -29,7 +28,7 @@ export class RrkMealplanMealList {
   }
 
   async componentWillLoad() {
-    this.waitingPatients = await this.getWaitingPatientsAsync();
+    this.meals = await this.getWaitingPatientsAsync();
   }
 
   render() {
@@ -39,25 +38,19 @@ export class RrkMealplanMealList {
           <div class="error">{this.errorMessage}</div>
         ) : (
           <md-list>
-            {this.waitingPatients.map(patient => (
-              <md-list-item onClick={() => this.entryClicked.emit(patient.id)}>
-                <div slot="headline">{patient.name}</div>
-                <div slot="supporting-text">{'Predpokladaný vstup: ' + this.isoDateToLocale(patient.estimatedStart)}</div>
+            {this.meals?.map(meal => (
+              <md-list-item onClick={() => this.entryClicked.emit(meal.id)}>
+                <div slot="headline">{meal.name}</div>
+                <div slot="supporting-text">{'Velkost porcie: ' + meal.portionSize}</div>
                 <md-icon slot="start">person</md-icon>
               </md-list-item>
             ))}
           </md-list>
         )}
-
         <md-filled-icon-button class="add-button" onclick={() => this.entryClicked.emit('@new')}>
           <md-icon>add</md-icon>
         </md-filled-icon-button>
       </Host>
     );
-  }
-
-  private isoDateToLocale(iso: string) {
-    if (!iso) return '';
-    return new Date(Date.parse(iso)).toLocaleTimeString();
   }
 }

@@ -7,7 +7,6 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface RrkMealplanApp {
-        "ambulanceId": string;
         "apiBase": string;
         "basePath": string;
         "counter": number;
@@ -18,7 +17,6 @@ export namespace Components {
         "entryId": string;
     }
     interface RrkMealplanMealList {
-        "ambulanceId": string;
         "apiBase": string;
     }
 }
@@ -79,7 +77,6 @@ declare global {
 }
 declare namespace LocalJSX {
     interface RrkMealplanApp {
-        "ambulanceId"?: string;
         "apiBase"?: string;
         "basePath"?: string;
         "counter"?: number;
@@ -91,7 +88,6 @@ declare namespace LocalJSX {
         "onEditor-closed"?: (event: RrkMealplanMealEditorCustomEvent<string>) => void;
     }
     interface RrkMealplanMealList {
-        "ambulanceId"?: string;
         "apiBase"?: string;
         "onEntry-clicked"?: (event: RrkMealplanMealListCustomEvent<string>) => void;
     }

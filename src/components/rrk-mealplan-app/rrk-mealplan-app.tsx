@@ -15,7 +15,6 @@ export class RrkMealplanApp {
 
   @Prop() basePath: string = '';
   @Prop() apiBase: string;
-  @Prop() ambulanceId: string;
 
   @Prop() counter: number = 0;
 
@@ -91,18 +90,9 @@ export class RrkMealplanApp {
           </div>
         </div>
         {element === 'editor' ? (
-          <rrk-mealplan-meal-editor
-            entry-id={entryId}
-            oneditor-closed={() => navigate('./list')}
-            ambulance-id={this.ambulanceId}
-            api-base={this.apiBase}
-          ></rrk-mealplan-meal-editor>
+          <rrk-mealplan-meal-editor entry-id={entryId} oneditor-closed={() => navigate('./list')} api-base={this.apiBase}></rrk-mealplan-meal-editor>
         ) : (
-          <rrk-mealplan-meal-list
-            ambulance-id={this.ambulanceId}
-            api-base={this.apiBase}
-            onentry-clicked={(ev: CustomEvent<string>) => navigate('./entry/' + ev.detail)}
-          ></rrk-mealplan-meal-list>
+          <rrk-mealplan-meal-list api-base={this.apiBase} onentry-clicked={(ev: CustomEvent<string>) => navigate('./entry/' + ev.detail)}></rrk-mealplan-meal-list>
         )}
       </Host>
     );

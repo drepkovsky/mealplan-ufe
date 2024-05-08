@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { AmbulanceConditionsApiFactory, AmbulanceWaitingListApiFactory, Condition, WaitingListEntry } from '../../api/mealplan';
+import { Meal, MealsApiFactory } from '../../api/mealplan';
 
 @Component({
   tag: 'rrk-mealplan-meal-editor',
@@ -14,44 +14,49 @@ export class RrkMealplanMealEditor {
   @Event({ eventName: 'editor-closed' }) editorClosed: EventEmitter<string>;
 
   @State() private duration = 15;
-  @State() entry: WaitingListEntry;
+  @State() entry: Meal;
   @State() errorMessage: string;
   @State() isValid: boolean;
-  @State() conditions: Condition[];
 
   private formElement: HTMLFormElement;
 
-  private async getConditions(): Promise<Condition[]> {
-    try {
-      const response = await AmbulanceConditionsApiFactory(undefined, this.apiBase).getConditions(this.ambulanceId);
-      if (response.status < 299) {
-        this.conditions = response.data;
-      }
-    } catch (err: any) {
-      // no strong dependency on conditions
-    }
-    // always have some fallback condition
-    return (
-      this.conditions || [
-        {
-          code: 'fallback',
-          value: 'Neurčený dôvod návštevy',
-          typicalDurationMinutes: 15,
-        },
-      ]
-    );
-  }
+  // private async getConditions(): Promise<Condition[]> {
+  //   try {
+  //     const response = await AmbulanceConditionsApiFactory(undefined, this.apiBase).getConditions(this.ambulanceId);
+  //     if (response.status < 299) {
+  //       this.conditions = response.data;
+  //     }
+  //   } catch (err: any) {
+  //     // no strong dependency on conditions
+  //   }
+  //   // always have some fallback condition
+  //   return (
+  //     this.conditions || [
+  //       {
+  //         code: 'fallback',
+  //         value: 'Neurčený dôvod návštevy',
+  //         typicalDurationMinutes: 15,
+  //       },
+  //     ]
+  //   );
+  // }
 
-  private async getWaitingEntryAsync(): Promise<WaitingListEntry> {
+  private async getMealAsync(): Promise<Meal> {
     if (this.entryId === '@new') {
       this.isValid = false;
       this.entry = {
         id: '@new',
-        patientId: '',
-        waitingSince: new Date().toISOString(),
-        estimatedDurationMinutes: 15,
+        allergens: [],
+        ingredients: [],
+        name: '',
+        portionSize: '0',
+        nutrients: {
+          calories: 0,
+          carbohydrates: 0,
+          fats: 0,
+          proteins: 0,
+        },
       };
-      this.entry.estimatedStart = (await this.assumedEntryDateAsync()).toISOString();
       return this.entry;
     }
 
@@ -60,7 +65,7 @@ export class RrkMealplanMealEditor {
       return undefined;
     }
     try {
-      const response = await AmbulanceWaitingListApiFactory(undefined, this.apiBase).getWaitingListEntry(this.ambulanceId, this.entryId);
+      const response = await MealsApiFactory(undefined, this.apiBase).getMeal(this.entryId);
 
       if (response.status < 299) {
         this.entry = response.data;
@@ -74,28 +79,8 @@ export class RrkMealplanMealEditor {
     return undefined;
   }
 
-  private async assumedEntryDateAsync(): Promise<Date> {
-    try {
-      const response = await AmbulanceWaitingListApiFactory(undefined, this.apiBase).getWaitingListEntries(this.ambulanceId);
-      if (response.status > 299) {
-        return new Date();
-      }
-      const lastPatientOut = response.data
-        .map((_: WaitingListEntry) => Date.parse(_.estimatedStart) + _.estimatedDurationMinutes * 60 * 1000)
-        .reduce((acc: number, value: number) => Math.max(acc, value), 0);
-      return new Date(Math.max(Date.now(), lastPatientOut));
-    } catch (err: any) {
-      return new Date();
-    }
-  }
-
   async componentWillLoad() {
-    this.getWaitingEntryAsync();
-    this.getConditions();
-  }
-
-  private handleSliderInput(event: Event) {
-    this.duration = +(event.target as HTMLInputElement).value;
+    this.getMealAsync();
   }
 
   render() {
@@ -111,7 +96,7 @@ export class RrkMealplanMealEditor {
       <Host>
         <form ref={el => (this.formElement = el)}>
           <md-filled-text-field
-            label="Meno a Priezvisko"
+            label="Názov jedla"
             required
             value={this.entry?.name}
             oninput={(ev: InputEvent) => {
@@ -120,42 +105,92 @@ export class RrkMealplanMealEditor {
               }
             }}
           >
-            <md-icon slot="leading-icon">person</md-icon>
+            <md-icon slot="leading-icon">menu_book</md-icon>
           </md-filled-text-field>
           <md-filled-text-field
-            label="Registračné číslo pacienta"
+            label="Veľkosť porcie"
             required
-            value={this.entry?.patientId}
+            value={this.entry?.portionSize}
             oninput={(ev: InputEvent) => {
               if (this.entry) {
-                this.entry.patientId = this.handleInputEvent(ev);
+                this.entry.portionSize = this.handleInputEvent(ev);
               }
             }}
           >
-            <md-icon slot="leading-icon">fingerprint</md-icon>
+            <md-icon slot="leading-icon">fastfood</md-icon>
           </md-filled-text-field>
-          <md-filled-text-field label="Čakáte od" disabled value={new Date(this.entry?.waitingSince || Date.now()).toLocaleTimeString()}>
-            <md-icon slot="leading-icon">watch_later</md-icon>
-          </md-filled-text-field>
-          <md-filled-text-field disabled label="Predpokladaný čas vyšetrenia" value={new Date(this.entry?.estimatedStart || Date.now()).toLocaleTimeString()}>
-            <md-icon slot="leading-icon">login</md-icon>
-          </md-filled-text-field>
-          {this.renderConditions()}
-        </form>
-
-        <div class="duration-slider">
-          <span class="label">Predpokladaná doba trvania:&nbsp; </span>
-          <span class="label">{this.duration}</span>
-          <span class="label">&nbsp;minút</span>
-          <md-slider
+          <md-filled-text-field
+            label="Kalórie"
+            required
+            value={this.entry?.nutrients.calories.toString()}
             oninput={(ev: InputEvent) => {
               if (this.entry) {
-                this.entry.estimatedDurationMinutes = Number.parseInt(this.handleInputEvent(ev));
+                this.entry.nutrients.calories = Number.parseInt(this.handleInputEvent(ev));
               }
-              this.handleSliderInput(ev);
             }}
-          ></md-slider>
-        </div>
+          >
+            <md-icon slot="leading-icon">local_fire_department</md-icon>
+          </md-filled-text-field>
+          <md-filled-text-field
+            label="Sacharidy"
+            required
+            value={this.entry?.nutrients.carbohydrates.toString()}
+            oninput={(ev: InputEvent) => {
+              if (this.entry) {
+                this.entry.nutrients.carbohydrates = Number.parseInt(this.handleInputEvent(ev));
+              }
+            }}
+          >
+            <md-icon slot="leading-icon">cake</md-icon>
+          </md-filled-text-field>
+          <md-filled-text-field
+            label="Tuky"
+            required
+            value={this.entry?.nutrients.fats.toString()}
+            oninput={(ev: InputEvent) => {
+              if (this.entry) {
+                this.entry.nutrients.fats = Number.parseInt(this.handleInputEvent(ev));
+              }
+            }}
+          >
+            <md-icon slot="leading-icon">local_dining</md-icon>
+          </md-filled-text-field>
+          <md-filled-text-field
+            label="Bielkoviny"
+            required
+            value={this.entry?.nutrients.proteins.toString()}
+            oninput={(ev: InputEvent) => {
+              if (this.entry) {
+                this.entry.nutrients.proteins = Number.parseInt(this.handleInputEvent(ev));
+              }
+            }}
+          >
+            <md-icon slot="leading-icon">emoji_food_beverage</md-icon>
+          </md-filled-text-field>
+          {this.entry?.allergens.map((allergen, i) => {
+            return (
+              <md-filled-text-field
+                label={`Alergén ${i + 1}`}
+                required
+                value={allergen}
+                oninput={(ev: InputEvent) => {
+                  if (this.entry) {
+                    this.entry.allergens = this.entry.allergens.map(a => (a === allergen ? this.handleInputEvent(ev) : a));
+                  }
+                }}
+              />
+            );
+          })}
+          {/* new allergen */}
+          <md-filled-text-field
+            label={`Alergén ${this.entry?.allergens.length + 1}`}
+            oninput={(ev: InputEvent) => {
+              if (this.entry) {
+                this.entry.allergens = [...this.entry.allergens, this.handleInputEvent(ev)];
+              }
+            }}
+          />
+        </form>
 
         <md-divider></md-divider>
         <div class="actions">
@@ -176,44 +211,6 @@ export class RrkMealplanMealEditor {
     );
   }
 
-  private renderConditions() {
-    let conditions = this.conditions || [];
-    // we want to have this.entry`s condition in the selection list
-    if (this.entry?.condition) {
-      const index = conditions.findIndex(condition => condition.code === this.entry.condition.code);
-      if (index < 0) {
-        conditions = [this.entry.condition, ...conditions];
-      }
-    }
-    return (
-      <md-filled-select label="Dôvod návštevy" display-text={this.entry?.condition?.value} oninput={(ev: InputEvent) => this.handleCondition(ev)}>
-        <md-icon slot="leading-icon">sick</md-icon>
-        {this.entry?.condition?.reference ? (
-          <md-icon slot="trailing-icon" class="link" onclick={() => window.open(this.entry.condition.reference, '_blank')}>
-            open_in_new
-          </md-icon>
-        ) : undefined}
-        {conditions.map(condition => {
-          return (
-            <md-select-option value={condition.code} selected={condition.code === this.entry?.condition?.code}>
-              <div slot="headline">{condition.value}</div>
-            </md-select-option>
-          );
-        })}
-      </md-filled-select>
-    );
-  }
-
-  private handleCondition(ev: InputEvent) {
-    if (this.entry) {
-      const code = this.handleInputEvent(ev);
-      const condition = this.conditions.find(condition => condition.code === code);
-      this.entry.condition = Object.assign({}, condition);
-      this.entry.estimatedDurationMinutes = condition.typicalDurationMinutes;
-      this.duration = condition.typicalDurationMinutes;
-    }
-  }
-
   private handleInputEvent(ev: InputEvent): string {
     const target = ev.target as HTMLInputElement;
     // check validity of elements
@@ -230,9 +227,8 @@ export class RrkMealplanMealEditor {
 
   private async updateEntry() {
     try {
-      const api = AmbulanceWaitingListApiFactory(undefined, this.apiBase);
-      const response =
-        this.entryId === '@new' ? await api.createWaitingListEntry(this.ambulanceId, this.entry) : await api.updateWaitingListEntry(this.ambulanceId, this.entryId, this.entry);
+      const api = MealsApiFactory(undefined, this.apiBase);
+      const response = this.entryId === '@new' ? await api.createMeal(this.entry) : await api.updateMeal(this.entryId, this.entry);
       if (response.status < 299) {
         this.editorClosed.emit('store');
       } else {
@@ -245,7 +241,7 @@ export class RrkMealplanMealEditor {
 
   private async deleteEntry() {
     try {
-      const response = await AmbulanceWaitingListApiFactory(undefined, this.apiBase).deleteWaitingListEntry(this.ambulanceId, this.entryId);
+      const response = await MealsApiFactory(undefined, this.apiBase).deleteMeal(this.entryId);
       if (response.status < 299) {
         this.editorClosed.emit('delete');
       } else {
