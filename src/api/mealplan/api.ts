@@ -297,12 +297,16 @@ export const MealPlansApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary List all meal plans
+         * @summary List all meal plans for given patient
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listMealPlans: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/meal-plans`;
+        listMealPlans: async (patientId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'patientId' is not null or undefined
+            assertParamExists('listMealPlans', 'patientId', patientId)
+            const localVarPath = `/meal-plans/{patientId}`
+                .replace(`{${"patientId"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -410,12 +414,13 @@ export const MealPlansApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary List all meal plans
+         * @summary List all meal plans for given patient
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listMealPlans(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MealPlan>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listMealPlans(options);
+        async listMealPlans(patientId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MealPlan>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listMealPlans(patientId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -472,12 +477,13 @@ export const MealPlansApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @summary List all meal plans
+         * @summary List all meal plans for given patient
+         * @param {string} patientId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listMealPlans(options?: any): AxiosPromise<Array<MealPlan>> {
-            return localVarFp.listMealPlans(options).then((request) => request(axios, basePath));
+        listMealPlans(patientId: string, options?: any): AxiosPromise<Array<MealPlan>> {
+            return localVarFp.listMealPlans(patientId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -531,12 +537,13 @@ export interface MealPlansApiInterface {
 
     /**
      * 
-     * @summary List all meal plans
+     * @summary List all meal plans for given patient
+     * @param {string} patientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MealPlansApiInterface
      */
-    listMealPlans(options?: AxiosRequestConfig): AxiosPromise<Array<MealPlan>>;
+    listMealPlans(patientId: string, options?: AxiosRequestConfig): AxiosPromise<Array<MealPlan>>;
 
     /**
      * 
@@ -596,13 +603,14 @@ export class MealPlansApi extends BaseAPI implements MealPlansApiInterface {
 
     /**
      * 
-     * @summary List all meal plans
+     * @summary List all meal plans for given patient
+     * @param {string} patientId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MealPlansApi
      */
-    public listMealPlans(options?: AxiosRequestConfig) {
-        return MealPlansApiFp(this.configuration).listMealPlans(options).then((request) => request(this.axios, this.basePath));
+    public listMealPlans(patientId: string, options?: AxiosRequestConfig) {
+        return MealPlansApiFp(this.configuration).listMealPlans(patientId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
