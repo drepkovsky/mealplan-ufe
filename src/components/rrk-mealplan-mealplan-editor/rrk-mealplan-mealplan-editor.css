@@ -42,6 +42,12 @@ form {
   text-align: center;
 }
 
-.mealplans {
-  margin-top: 48px;
+.form-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--_wl-editor_gap);
+}
+
+.form-row-item {
+  flex: 1 0 0;
 }

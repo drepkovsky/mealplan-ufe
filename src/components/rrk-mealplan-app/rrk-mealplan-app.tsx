@@ -42,10 +42,15 @@ export class RrkMealplanApp {
     console.debug('rrk-mealplan-app.render() - path: %s', this.relativePath);
     let element = 'list';
     let entryId = '@new';
+    let patientId = '@new';
 
     if (this.relativePath.startsWith('meal/')) {
       element = 'editor';
       entryId = this.relativePath.split('/')[1];
+    } else if (this.relativePath.match(/patient\/(.*)\/mealplan\/(.*)/)) {
+      element = 'mealplan';
+      entryId = this.relativePath.split('/')[3];
+      patientId = this.relativePath.split('/')[1];
     } else if (this.relativePath.startsWith('patients/')) {
       element = 'patients';
     } else if (this.relativePath.startsWith('patient/')) {
@@ -66,6 +71,14 @@ export class RrkMealplanApp {
         ),
         patient: <rrk-mealplan-patient-editor entry-id={entryId} api-base={this.apiBase} oneditor-closed={() => navigate('/meals/patients/')}></rrk-mealplan-patient-editor>,
         list: <rrk-mealplan-meal-list api-base={this.apiBase} onentry-clicked={(ev: CustomEvent<string>) => navigate('/meals/meal/' + ev.detail)}></rrk-mealplan-meal-list>,
+        mealplan: (
+          <rrk-mealplan-mealplan-editor
+            entry-id={entryId}
+            patient-id={patientId}
+            api-base={this.apiBase}
+            oneditor-closed={() => navigate('/meals/patient/' + patientId)}
+          ></rrk-mealplan-mealplan-editor>
+        ),
       }[element];
     };
 

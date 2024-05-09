@@ -18,10 +18,6 @@ export class RrkMealplanPatientEditor {
 
   private formElement: HTMLFormElement;
 
-  private isNewEntry(): boolean {
-    return this.entryId === '@new';
-  }
-
   private async getPatientAsync(): Promise<Patient> {
     if (this.entryId === '@new') {
       this.isValid = false;
@@ -135,6 +131,18 @@ export class RrkMealplanPatientEditor {
             Uložiť
           </md-filled-button>
         </div>
+
+        {this.entryId !== '@new' && (
+          <div class="mealplans">
+            <h5>Jedálničky</h5>
+            <rrk-mealplan-mealplan-list
+              patient-id={this.entryId}
+              api-base={this.apiBase}
+              onentry-clicked={(ev: CustomEvent<string>) => (window.location.href = `/meals/patient/${this.entryId}/mealplan/${ev.detail}`)}
+            ></rrk-mealplan-mealplan-list>
+            '
+          </div>
+        )}
       </Host>
     );
   }

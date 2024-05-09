@@ -18,6 +18,15 @@ export namespace Components {
     interface RrkMealplanMealList {
         "apiBase": string;
     }
+    interface RrkMealplanMealplanEditor {
+        "apiBase": string;
+        "entryId": string;
+        "patientId": string;
+    }
+    interface RrkMealplanMealplanList {
+        "apiBase": string;
+        "patientId": string;
+    }
     interface RrkMealplanPatientEditor {
         "apiBase": string;
         "entryId": string;
@@ -33,6 +42,14 @@ export interface RrkMealplanMealEditorCustomEvent<T> extends CustomEvent<T> {
 export interface RrkMealplanMealListCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLRrkMealplanMealListElement;
+}
+export interface RrkMealplanMealplanEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLRrkMealplanMealplanEditorElement;
+}
+export interface RrkMealplanMealplanListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLRrkMealplanMealplanListElement;
 }
 export interface RrkMealplanPatientEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -83,6 +100,40 @@ declare global {
         prototype: HTMLRrkMealplanMealListElement;
         new (): HTMLRrkMealplanMealListElement;
     };
+    interface HTMLRrkMealplanMealplanEditorElementEventMap {
+        "editor-closed": string;
+    }
+    interface HTMLRrkMealplanMealplanEditorElement extends Components.RrkMealplanMealplanEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLRrkMealplanMealplanEditorElementEventMap>(type: K, listener: (this: HTMLRrkMealplanMealplanEditorElement, ev: RrkMealplanMealplanEditorCustomEvent<HTMLRrkMealplanMealplanEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLRrkMealplanMealplanEditorElementEventMap>(type: K, listener: (this: HTMLRrkMealplanMealplanEditorElement, ev: RrkMealplanMealplanEditorCustomEvent<HTMLRrkMealplanMealplanEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLRrkMealplanMealplanEditorElement: {
+        prototype: HTMLRrkMealplanMealplanEditorElement;
+        new (): HTMLRrkMealplanMealplanEditorElement;
+    };
+    interface HTMLRrkMealplanMealplanListElementEventMap {
+        "entry-clicked": string;
+    }
+    interface HTMLRrkMealplanMealplanListElement extends Components.RrkMealplanMealplanList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLRrkMealplanMealplanListElementEventMap>(type: K, listener: (this: HTMLRrkMealplanMealplanListElement, ev: RrkMealplanMealplanListCustomEvent<HTMLRrkMealplanMealplanListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLRrkMealplanMealplanListElementEventMap>(type: K, listener: (this: HTMLRrkMealplanMealplanListElement, ev: RrkMealplanMealplanListCustomEvent<HTMLRrkMealplanMealplanListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLRrkMealplanMealplanListElement: {
+        prototype: HTMLRrkMealplanMealplanListElement;
+        new (): HTMLRrkMealplanMealplanListElement;
+    };
     interface HTMLRrkMealplanPatientEditorElementEventMap {
         "editor-closed": string;
     }
@@ -121,6 +172,8 @@ declare global {
         "rrk-mealplan-app": HTMLRrkMealplanAppElement;
         "rrk-mealplan-meal-editor": HTMLRrkMealplanMealEditorElement;
         "rrk-mealplan-meal-list": HTMLRrkMealplanMealListElement;
+        "rrk-mealplan-mealplan-editor": HTMLRrkMealplanMealplanEditorElement;
+        "rrk-mealplan-mealplan-list": HTMLRrkMealplanMealplanListElement;
         "rrk-mealplan-patient-editor": HTMLRrkMealplanPatientEditorElement;
         "rrk-mealplan-patient-list": HTMLRrkMealplanPatientListElement;
     }
@@ -140,6 +193,17 @@ declare namespace LocalJSX {
         "apiBase"?: string;
         "onEntry-clicked"?: (event: RrkMealplanMealListCustomEvent<string>) => void;
     }
+    interface RrkMealplanMealplanEditor {
+        "apiBase"?: string;
+        "entryId"?: string;
+        "onEditor-closed"?: (event: RrkMealplanMealplanEditorCustomEvent<string>) => void;
+        "patientId"?: string;
+    }
+    interface RrkMealplanMealplanList {
+        "apiBase"?: string;
+        "onEntry-clicked"?: (event: RrkMealplanMealplanListCustomEvent<string>) => void;
+        "patientId"?: string;
+    }
     interface RrkMealplanPatientEditor {
         "apiBase"?: string;
         "entryId"?: string;
@@ -153,6 +217,8 @@ declare namespace LocalJSX {
         "rrk-mealplan-app": RrkMealplanApp;
         "rrk-mealplan-meal-editor": RrkMealplanMealEditor;
         "rrk-mealplan-meal-list": RrkMealplanMealList;
+        "rrk-mealplan-mealplan-editor": RrkMealplanMealplanEditor;
+        "rrk-mealplan-mealplan-list": RrkMealplanMealplanList;
         "rrk-mealplan-patient-editor": RrkMealplanPatientEditor;
         "rrk-mealplan-patient-list": RrkMealplanPatientList;
     }
@@ -164,6 +230,8 @@ declare module "@stencil/core" {
             "rrk-mealplan-app": LocalJSX.RrkMealplanApp & JSXBase.HTMLAttributes<HTMLRrkMealplanAppElement>;
             "rrk-mealplan-meal-editor": LocalJSX.RrkMealplanMealEditor & JSXBase.HTMLAttributes<HTMLRrkMealplanMealEditorElement>;
             "rrk-mealplan-meal-list": LocalJSX.RrkMealplanMealList & JSXBase.HTMLAttributes<HTMLRrkMealplanMealListElement>;
+            "rrk-mealplan-mealplan-editor": LocalJSX.RrkMealplanMealplanEditor & JSXBase.HTMLAttributes<HTMLRrkMealplanMealplanEditorElement>;
+            "rrk-mealplan-mealplan-list": LocalJSX.RrkMealplanMealplanList & JSXBase.HTMLAttributes<HTMLRrkMealplanMealplanListElement>;
             "rrk-mealplan-patient-editor": LocalJSX.RrkMealplanPatientEditor & JSXBase.HTMLAttributes<HTMLRrkMealplanPatientEditorElement>;
             "rrk-mealplan-patient-list": LocalJSX.RrkMealplanPatientList & JSXBase.HTMLAttributes<HTMLRrkMealplanPatientListElement>;
         }
