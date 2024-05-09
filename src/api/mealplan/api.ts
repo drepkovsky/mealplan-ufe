@@ -305,7 +305,7 @@ export const MealPlansApiAxiosParamCreator = function (configuration?: Configura
         listMealPlans: async (patientId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patientId' is not null or undefined
             assertParamExists('listMealPlans', 'patientId', patientId)
-            const localVarPath = `/meal-plans/{patientId}`
+            const localVarPath = `/meal-plans/patient/{patientId}`
                 .replace(`{${"patientId"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);

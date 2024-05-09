@@ -250,7 +250,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MealPlan'
-  '/meal-plans/{patientId}':
+  '/meal-plans/patient/{patientId}':
     get:
       tags:
         - Meal Plans

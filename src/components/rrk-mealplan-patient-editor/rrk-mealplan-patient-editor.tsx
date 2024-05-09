@@ -18,6 +18,10 @@ export class RrkMealplanPatientEditor {
 
   private formElement: HTMLFormElement;
 
+  private isNewEntry(): boolean {
+    return this.entryId === '@new';
+  }
+
   private async getPatientAsync(): Promise<Patient> {
     if (this.entryId === '@new') {
       this.isValid = false;

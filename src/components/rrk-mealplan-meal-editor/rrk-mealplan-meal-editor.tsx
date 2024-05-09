@@ -13,7 +13,6 @@ export class RrkMealplanMealEditor {
 
   @Event({ eventName: 'editor-closed' }) editorClosed: EventEmitter<string>;
 
-  @State() private duration = 15;
   @State() entry: Meal;
   @State() errorMessage: string;
   @State() isValid: boolean;
