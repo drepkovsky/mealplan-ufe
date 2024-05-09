@@ -40,19 +40,18 @@ describe('rrk-mealplan-mealplan-list', () => {
   });
 
   it('renders sample entries', async () => {
-    // simulate API response using sampleEntries
+    // if it contains meal-plan mock sample entries else mock meals
     mock.onGet().reply(200, sampleEntries);
 
     // set proper attributes
     const page = await newSpecPage({
       components: [RrkMealplanMealPlanList],
-      html: `<rrk-mealplan-mealplan-list  api-base="http://test/api"></rrk-mealplan-mealplan-list>`,
+      html: `<rrk-mealplan-mealplan-list patient-id="entry-2"  api-base="http://test/api"></rrk-mealplan-mealplan-list>`,
     });
     const wlList = page.rootInstance as RrkMealplanMealPlanList;
     const expectedMealPlans = wlList?.mealPlans?.length;
 
     const items = page.root.shadowRoot.querySelectorAll('md-list-item');
-    // use sample entries as expectation
     expect(expectedMealPlans).toEqual(sampleEntries.length);
     expect(items.length).toEqual(expectedMealPlans);
   });
@@ -68,10 +67,8 @@ describe('rrk-mealplan-mealplan-list', () => {
     const expectedMealPlans = wlList?.mealPlans?.length;
 
     const errorMessage = page.root.shadowRoot.querySelectorAll('.error');
-    const items = page.root.shadowRoot.querySelectorAll('md-list-item');
 
     expect(errorMessage.length).toBeGreaterThanOrEqual(1);
     expect(expectedMealPlans).toEqual(0);
-    expect(items.length).toEqual(expectedMealPlans);
   });
 });

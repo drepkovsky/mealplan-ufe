@@ -114,7 +114,7 @@ export class RrkMealplanMealPlanEditor {
           </md-filled-text-field>
 
           <h4>Jedlá</h4>
-          {this.entry?.meals.map((meal, index) => (
+          {this.entry?.meals?.map((meal, index) => (
             <div class="form-row" key={index}>
               <md-filled-text-field
                 label="Čas"

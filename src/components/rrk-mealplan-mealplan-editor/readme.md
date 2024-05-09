@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type     | Default     |
-| ------------- | -------------- | ----------- | -------- | ----------- |
-| `ambulanceId` | `ambulance-id` |             | `string` | `undefined` |
-| `apiBase`     | `api-base`     |             | `string` | `undefined` |
-| `entryId`     | `entry-id`     |             | `string` | `undefined` |
+| Property    | Attribute    | Description | Type     | Default     |
+| ----------- | ------------ | ----------- | -------- | ----------- |
+| `apiBase`   | `api-base`   |             | `string` | `undefined` |
+| `entryId`   | `entry-id`   |             | `string` | `undefined` |
+| `patientId` | `patient-id` |             | `string` | `undefined` |
 
 
 ## Events
@@ -30,8 +30,8 @@
 ### Graph
 ```mermaid
 graph TD;
-  rrk-mealplan-app --> rrk-mealplan-meal-editor
-  style rrk-mealplan-meal-editor fill:#f9f,stroke:#333,stroke-width:4px
+  rrk-mealplan-app --> rrk-mealplan-mealplan-editor
+  style rrk-mealplan-mealplan-editor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

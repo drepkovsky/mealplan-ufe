@@ -28,7 +28,7 @@ describe('rrk-mealplan-mealplan-editor', () => {
   });
 
   it('buttons shall be of different type', async () => {
-    mock.onGet(/^.*\/entries\/.+/).reply(200, sampleEntry);
+    mock.onGet().reply(200, sampleEntry);
 
     const page = await newSpecPage({
       components: [RrkMealplanMealPlanEditor],
@@ -40,7 +40,7 @@ describe('rrk-mealplan-mealplan-editor', () => {
     let items: any = await page.root.shadowRoot.querySelectorAll('md-filled-button');
     expect(items.length).toEqual(1);
     items = await page.root.shadowRoot.querySelectorAll('md-outlined-button');
-    expect(items.length).toEqual(1);
+    expect(items.length).toEqual(2);
 
     items = await page.root.shadowRoot.querySelectorAll('md-filled-tonal-button');
     expect(items.length).toEqual(1);

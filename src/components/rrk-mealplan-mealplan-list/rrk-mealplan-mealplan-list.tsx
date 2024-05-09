@@ -46,7 +46,7 @@ export class RrkMealplanMealPlanList {
     this.mealPlans = await this.getMealPlansAsync();
     this.meals = await this.getMeals().then(meals => {
       const mealsById: Record<string, Meal> = {};
-      meals.forEach(meal => (mealsById[meal.id] = meal));
+      meals?.forEach(meal => (mealsById[meal.id] = meal));
       return mealsById;
     });
   }
@@ -71,7 +71,7 @@ export class RrkMealplanMealPlanList {
                 <div slot="supporting-text">
                   {'Jedlá: '}{' '}
                   {mealPlan.meals
-                    .map(meal => `${this.meals[meal.mealId]?.name} - ${meal.time}`)
+                    ?.map(meal => `${this.meals[meal.mealId]?.name} - ${meal.time}`)
                     .filter(Boolean)
                     .join(', ')}
                 </div>

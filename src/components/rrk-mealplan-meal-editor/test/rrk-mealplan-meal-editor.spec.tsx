@@ -34,31 +34,30 @@ describe('rrk-mealplan-meal-editor', () => {
   });
 
   it('buttons shall be of different type', async () => {
-    mock.onGet(/^.*\/entries\/.+/).reply(200, sampleEntry);
+    mock.onGet().reply(200, sampleEntry);
 
     const page = await newSpecPage({
       components: [RrkMealplanMealEditor],
-      html: `<rrk-mealplan-meal-editor entry-id="test-entry"
-      ambulance-id="test-ambulance" api-base="http://sample.test/api"></rrk-mealplan-meal-editor>`,
+      html: `<rrk-mealplan-meal-editor entry-id="test-entry" api-base="http://sample.test/api"></rrk-mealplan-meal-editor>`,
     });
     await delay(300);
     await page.waitForChanges();
 
-    let items: any = await page.root.shadowRoot.querySelectorAll('md-filled-button');
+    let items: any = page.root.shadowRoot.querySelectorAll('md-filled-button');
     expect(items.length).toEqual(1);
-    items = await page.root.shadowRoot.querySelectorAll('md-outlined-button');
+    items = page.root.shadowRoot.querySelectorAll('md-outlined-button');
     expect(items.length).toEqual(1);
 
-    items = await page.root.shadowRoot.querySelectorAll('md-filled-tonal-button');
+    items = page.root.shadowRoot.querySelectorAll('md-filled-tonal-button');
     expect(items.length).toEqual(1);
   });
 
-  it('first text field is patient name', async () => {
-    mock.onGet(/^.*\/entries\/.+/).reply(200, sampleEntry);
+  it('first text field is a meal name', async () => {
+    mock.onGet().reply(200, sampleEntry);
 
     const page = await newSpecPage({
       components: [RrkMealplanMealEditor],
-      html: `<rrk-mealplan-meal-editor entry-id="test-entry" ambulance-id="test-ambulance" api-base="http://sample.test/api"></rrk-mealplan-meal-editor>`,
+      html: `<rrk-mealplan-meal-editor entry-id="test-entry" api-base="http://sample.test/api"></rrk-mealplan-meal-editor>`,
     });
     let items: any = await page.root.shadowRoot.querySelectorAll('md-filled-text-field');
 

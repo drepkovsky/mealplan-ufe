@@ -28,7 +28,7 @@ describe('rrk-mealplan-patient-editor', () => {
   });
 
   it('buttons shall be of different type', async () => {
-    mock.onGet(/^.*\/entries\/.+/).reply(200, sampleEntry);
+    mock.onGet().reply(200, sampleEntry);
 
     const page = await newSpecPage({
       components: [RrkMealplanPatientEditor],
@@ -47,7 +47,7 @@ describe('rrk-mealplan-patient-editor', () => {
   });
 
   it('first text field is patient name', async () => {
-    mock.onGet(/^.*\/entries\/.+/).reply(200, sampleEntry);
+    mock.onGet().reply(200, sampleEntry);
 
     const page = await newSpecPage({
       components: [RrkMealplanPatientEditor],

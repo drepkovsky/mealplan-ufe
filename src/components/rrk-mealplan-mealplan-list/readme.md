@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type     | Default     |
-| ------------- | -------------- | ----------- | -------- | ----------- |
-| `ambulanceId` | `ambulance-id` |             | `string` | `undefined` |
-| `apiBase`     | `api-base`     |             | `string` | `undefined` |
+| Property    | Attribute    | Description | Type     | Default     |
+| ----------- | ------------ | ----------- | -------- | ----------- |
+| `apiBase`   | `api-base`   |             | `string` | `undefined` |
+| `patientId` | `patient-id` |             | `string` | `undefined` |
 
 
 ## Events
@@ -24,12 +24,12 @@
 
 ### Used by
 
- - [rrk-mealplan-app](../rrk-mealplan-app)
+ - [rrk-mealplan-patient-editor](../rrk-mealplan-patient-editor)
 
 ### Graph
 ```mermaid
 graph TD;
-  rrk-mealplan-app --> rrk-mealplan-mealplan-list
+  rrk-mealplan-patient-editor --> rrk-mealplan-mealplan-list
   style rrk-mealplan-mealplan-list fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
