@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { Meal, MealPlan, MealPlansApiFactory, MealsApiFactory, PatientsApiFactory } from '../../api/mealplan';
+import { Meal, MealPlan, MealPlansApiFactory, MealsApiFactory } from '../../api/mealplan';
 
 @Component({
   tag: 'rrk-mealplan-mealplan-editor',

@@ -15,9 +15,10 @@
 
 ## Events
 
-| Event           | Description | Type                  |
-| --------------- | ----------- | --------------------- |
-| `editor-closed` |             | `CustomEvent<string>` |
+| Event              | Description | Type                  |
+| ------------------ | ----------- | --------------------- |
+| `editor-closed`    |             | `CustomEvent<string>` |
+| `mealplan-clicked` |             | `CustomEvent<string>` |
 
 
 ## Dependencies
