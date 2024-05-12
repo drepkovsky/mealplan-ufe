@@ -480,7 +480,7 @@ components:
       summary: Example Patient Creation
       value:
         fullName: 'John Doe'
-        patientId: '1234567890'
+        id: '1234567890'
         age: 34
         allergens: ['peanuts', 'shellfish']
         ingredientPreferences: ['chicken', 'rice']
@@ -488,12 +488,12 @@ components:
       summary: Example list of patients
       value:
       - fullName: 'John Doe'
-        patientId: '1234567890'
+        id: '1234567890'
         age: 34
         allergens: ['peanuts', 'shellfish']
         ingredientPreferences: ['chicken', 'rice']
       - fullName: 'Jane Smith'
-        patientId: '0987654321'
+        id: '0987654321'
         age: 29
         allergens: ['gluten']
         ingredientPreferences: ['beef', 'quinoa']
@@ -501,7 +501,7 @@ components:
       summary: Specific Patient Details
       value:
         fullName: 'John Doe'
-        patientId: '1234567890'
+        id: '1234567890'
         age: 34
         allergens: ['peanuts', 'shellfish']
         ingredientPreferences: ['chicken', 'rice']
