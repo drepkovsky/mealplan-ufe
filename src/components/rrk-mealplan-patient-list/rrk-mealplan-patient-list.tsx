@@ -39,7 +39,7 @@ export class RrkMealplanPatientList {
         ) : (
           <md-list>
             {this.patients?.map(patient => (
-              <md-list-item onClick={() => this.entryClicked.emit(patient.patientId)}>
+              <md-list-item onClick={() => this.entryClicked.emit(patient.id)}>
                 <div slot="headline">{patient.fullName}</div>
                 <div slot="supporting-text">
                   {'Alergény: '} {patient.allergens.join(', ')}

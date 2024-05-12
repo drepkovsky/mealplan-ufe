@@ -7,21 +7,21 @@ import { RrkMealplanPatientList } from '../rrk-mealplan-patient-list';
 describe('rrk-mealplan-patient-list', () => {
   const sampleEntries: Patient[] = [
     {
-      patientId: 'entry-1',
+      id: 'entry-1',
       allergens: ['nuts'],
       ingredientPreferences: ['water', 'flour', 'nuts'],
       fullName: 'Janko Hrasko',
       age: 30,
     },
     {
-      patientId: 'entry-2',
+      id: 'entry-2',
       allergens: ['lactose'],
       ingredientPreferences: ['water', 'flour', 'nuts'],
       fullName: 'Ferko Mrkvicka',
       age: 40,
     },
     {
-      patientId: 'entry-3',
+      id: 'entry-3',
       allergens: ['nuts'],
       ingredientPreferences: ['water', 'flour', 'nuts'],
       fullName: 'Jozko Vajda',

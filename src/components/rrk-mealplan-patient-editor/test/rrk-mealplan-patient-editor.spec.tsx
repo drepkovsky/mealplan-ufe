@@ -6,7 +6,7 @@ import { RrkMealplanPatientEditor } from '../rrk-mealplan-patient-editor';
 
 describe('rrk-mealplan-patient-editor', () => {
   const sampleEntry: Patient = {
-    patientId: 'entry-1',
+    id: 'entry-1',
     allergens: ['nuts'],
     ingredientPreferences: ['water', 'flour', 'nuts'],
     fullName: 'Chlieb',

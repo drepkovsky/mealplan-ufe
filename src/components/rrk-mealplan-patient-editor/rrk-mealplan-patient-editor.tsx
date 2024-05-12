@@ -11,6 +11,7 @@ export class RrkMealplanPatientEditor {
   @Prop() apiBase: string;
 
   @Event({ eventName: 'editor-closed' }) editorClosed: EventEmitter<string>;
+  @Event({ eventName: 'mealplan-clicked' }) mealplanClicked: EventEmitter<string>;
 
   @State() entry: Patient;
   @State() errorMessage: string;
@@ -22,7 +23,7 @@ export class RrkMealplanPatientEditor {
     if (this.entryId === '@new') {
       this.isValid = false;
       this.entry = {
-        patientId: '@new',
+        id: '@new',
         age: 40,
         allergens: [],
         fullName: '',
@@ -138,9 +139,8 @@ export class RrkMealplanPatientEditor {
             <rrk-mealplan-mealplan-list
               patient-id={this.entryId}
               api-base={this.apiBase}
-              onentry-clicked={(ev: CustomEvent<string>) => (window.location.href = `/meals/patient/${this.entryId}/mealplan/${ev.detail}`)}
+              onentry-clicked={(ev: CustomEvent<string>) => this.mealplanClicked.emit(ev.detail)}
             ></rrk-mealplan-mealplan-list>
-            '
           </div>
         )}
       </Host>

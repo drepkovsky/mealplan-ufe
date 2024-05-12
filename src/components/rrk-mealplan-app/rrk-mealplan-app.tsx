@@ -63,22 +63,24 @@ export class RrkMealplanApp {
       window.navigation.navigate(absolute);
     };
 
+    const back = () => {
+      window.history.back();
+    };
+
     const componentMap = (element: string) => {
       return {
-        editor: <rrk-mealplan-meal-editor entry-id={entryId} oneditor-closed={() => navigate('/meals')} api-base={this.apiBase}></rrk-mealplan-meal-editor>,
-        patients: (
-          <rrk-mealplan-patient-list api-base={this.apiBase} onentry-clicked={(ev: CustomEvent<string>) => navigate('/meals/patient/' + ev.detail)}></rrk-mealplan-patient-list>
-        ),
-        patient: <rrk-mealplan-patient-editor entry-id={entryId} api-base={this.apiBase} oneditor-closed={() => navigate('/meals/patients/')}></rrk-mealplan-patient-editor>,
-        list: <rrk-mealplan-meal-list api-base={this.apiBase} onentry-clicked={(ev: CustomEvent<string>) => navigate('/meals/meal/' + ev.detail)}></rrk-mealplan-meal-list>,
-        mealplan: (
-          <rrk-mealplan-mealplan-editor
+        editor: <rrk-mealplan-meal-editor entry-id={entryId} oneditor-closed={back} api-base={this.apiBase}></rrk-mealplan-meal-editor>,
+        patients: <rrk-mealplan-patient-list api-base={this.apiBase} onentry-clicked={(ev: CustomEvent<string>) => navigate('patient/' + ev.detail)}></rrk-mealplan-patient-list>,
+        patient: (
+          <rrk-mealplan-patient-editor
             entry-id={entryId}
-            patient-id={patientId}
             api-base={this.apiBase}
-            oneditor-closed={() => navigate('/meals/patient/' + patientId)}
-          ></rrk-mealplan-mealplan-editor>
+            oneditor-closed={back}
+            onmealplan-clicked={(ev: CustomEvent<string>) => navigate('patient/' + entryId + '/mealplan/' + ev.detail)}
+          ></rrk-mealplan-patient-editor>
         ),
+        list: <rrk-mealplan-meal-list api-base={this.apiBase} onentry-clicked={(ev: CustomEvent<string>) => navigate('meal/' + ev.detail)}></rrk-mealplan-meal-list>,
+        mealplan: <rrk-mealplan-mealplan-editor entry-id={entryId} patient-id={patientId} api-base={this.apiBase} oneditor-closed={back}></rrk-mealplan-mealplan-editor>,
       }[element];
     };
 
@@ -95,7 +97,7 @@ export class RrkMealplanApp {
                     href="#"
                     onClick={ev => {
                       ev.preventDefault();
-                      navigate('/meals/');
+                      navigate('');
                     }}
                   >
                     Zoznam jedal
@@ -106,7 +108,8 @@ export class RrkMealplanApp {
                     href="#"
                     onClick={ev => {
                       ev.preventDefault();
-                      navigate('/meals/patients/');
+
+                      navigate('patients/');
                     }}
                   >
                     Zoznam pacientov

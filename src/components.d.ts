@@ -11,7 +11,6 @@ export namespace Components {
         "basePath": string;
     }
     interface RrkMealplanMealEditor {
-        "ambulanceId": string;
         "apiBase": string;
         "entryId": string;
     }
@@ -136,6 +135,7 @@ declare global {
     };
     interface HTMLRrkMealplanPatientEditorElementEventMap {
         "editor-closed": string;
+        "mealplan-clicked": string;
     }
     interface HTMLRrkMealplanPatientEditorElement extends Components.RrkMealplanPatientEditor, HTMLStencilElement {
         addEventListener<K extends keyof HTMLRrkMealplanPatientEditorElementEventMap>(type: K, listener: (this: HTMLRrkMealplanPatientEditorElement, ev: RrkMealplanPatientEditorCustomEvent<HTMLRrkMealplanPatientEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -184,7 +184,6 @@ declare namespace LocalJSX {
         "basePath"?: string;
     }
     interface RrkMealplanMealEditor {
-        "ambulanceId"?: string;
         "apiBase"?: string;
         "entryId"?: string;
         "onEditor-closed"?: (event: RrkMealplanMealEditorCustomEvent<string>) => void;
@@ -208,6 +207,7 @@ declare namespace LocalJSX {
         "apiBase"?: string;
         "entryId"?: string;
         "onEditor-closed"?: (event: RrkMealplanPatientEditorCustomEvent<string>) => void;
+        "onMealplan-clicked"?: (event: RrkMealplanPatientEditorCustomEvent<string>) => void;
     }
     interface RrkMealplanPatientList {
         "apiBase"?: string;

@@ -196,7 +196,7 @@ export class RrkMealplanMealPlanEditor {
 
   private async deleteEntry() {
     try {
-      const response = await PatientsApiFactory(undefined, this.apiBase).deletePatient(this.entryId);
+      const response = await MealPlansApiFactory(undefined, this.apiBase).deleteMealPlan(this.entryId);
       if (response.status < 299) {
         this.editorClosed.emit('delete');
       } else {

@@ -8,7 +8,6 @@ import { Meal, MealsApiFactory } from '../../api/mealplan';
 })
 export class RrkMealplanMealEditor {
   @Prop() entryId: string;
-  @Prop() ambulanceId: string;
   @Prop() apiBase: string;
 
   @Event({ eventName: 'editor-closed' }) editorClosed: EventEmitter<string>;

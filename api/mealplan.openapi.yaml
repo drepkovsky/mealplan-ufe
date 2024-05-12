@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
-  - description: Hospital Meal Plan Management Endpoint
-    url: /api
+- description: Hospital Meal Plan Management Endpoint
+  url: /api
 info:
   description: API to manage meals, patients, and their meal plans in a hospital.
   version: '1.0.0'
@@ -12,19 +12,19 @@ info:
     name: CC BY 4.0
     url: 'https://creativecommons.org/licenses/by/4.0/'
 tags:
-  - name: Meals
-    description: Operations about meals
-  - name: Patients
-    description: Operations about patients
-  - name: Meal Plans
-    description: Operations about meal plans
+- name: Meals
+  description: Operations about meals
+- name: Patients
+  description: Operations about patients
+- name: Meal Plans
+  description: Operations about meal plans
 
 paths:
   # Meals operations
   '/meals':
     post:
       tags:
-        - Meals
+      - Meals
       summary: Creates a new meal
       operationId: createMeal
       requestBody:
@@ -46,7 +46,7 @@ paths:
                 $ref: '#/components/schemas/Meal'
     get:
       tags:
-        - Meals
+      - Meals
       summary: List all meals
       operationId: listMeals
       responses:
@@ -64,15 +64,15 @@ paths:
   '/meals/{mealId}':
     get:
       tags:
-        - Meals
+      - Meals
       summary: Get a meal by ID
       operationId: getMeal
       parameters:
-        - name: mealId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: mealId
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: Meal details
@@ -87,15 +87,15 @@ paths:
           description: Meal not found
     put:
       tags:
-        - Meals
+      - Meals
       summary: Update a meal by ID
       operationId: updateMeal
       parameters:
-        - name: mealId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: mealId
+        in: path
+        required: true
+        schema:
+          type: string
       requestBody:
         description: Data for updating a meal
         required: true
@@ -108,15 +108,15 @@ paths:
           description: Meal updated
     delete:
       tags:
-        - Meals
+      - Meals
       summary: Delete a meal by ID
       operationId: deleteMeal
       parameters:
-        - name: mealId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: mealId
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '204':
           description: Meal deleted
@@ -127,7 +127,7 @@ paths:
   '/patients':
     post:
       tags:
-        - Patients
+      - Patients
       summary: Creates a new patient
       operationId: createPatient
       requestBody:
@@ -149,7 +149,7 @@ paths:
                 $ref: '#/components/schemas/Patient'
     get:
       tags:
-        - Patients
+      - Patients
       summary: List all patients
       operationId: listPatients
       responses:
@@ -167,15 +167,15 @@ paths:
   '/patients/{patientId}':
     get:
       tags:
-        - Patients
+      - Patients
       summary: Get a patient by ID
       operationId: getPatient
       parameters:
-        - name: patientId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: Patient details
@@ -190,15 +190,15 @@ paths:
           description: Patient not found
     put:
       tags:
-        - Patients
+      - Patients
       summary: Update a patient by ID
       operationId: updatePatient
       parameters:
-        - name: patientId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
       requestBody:
         description: Data for updating a patient
         required: true
@@ -211,15 +211,15 @@ paths:
           description: Patient updated
     delete:
       tags:
-        - Patients
+      - Patients
       summary: Delete a patient by ID
       operationId: deletePatient
       parameters:
-        - name: patientId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '204':
           description: Patient deleted
@@ -230,7 +230,7 @@ paths:
   '/meal-plans':
     post:
       tags:
-        - Meal Plans
+      - Meal Plans
       summary: Creates a new meal plan
       operationId: createMealPlan
       requestBody:
@@ -253,15 +253,15 @@ paths:
   '/meal-plans/patient/{patientId}':
     get:
       tags:
-        - Meal Plans
+      - Meal Plans
       summary: List all meal plans for given patient
       operationId: listMealPlans
       parameters:
-        - name: patientId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: A list of meal plans
@@ -277,15 +277,15 @@ paths:
   '/meal-plans/{mealPlanId}':
     get:
       tags:
-        - Meal Plans
+      - Meal Plans
       summary: Get a meal plan by ID
       operationId: getMealPlan
       parameters:
-        - name: mealPlanId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: mealPlanId
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: Meal plan details
@@ -300,15 +300,15 @@ paths:
           description: Meal plan not found
     put:
       tags:
-        - Meal Plans
+      - Meal Plans
       summary: Update a meal plan by ID
       operationId: updateMealPlan
       parameters:
-        - name: mealPlanId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: mealPlanId
+        in: path
+        required: true
+        schema:
+          type: string
       requestBody:
         description: Data for updating a meal plan
         required: true
@@ -321,15 +321,15 @@ paths:
           description: Meal plan updated
     delete:
       tags:
-        - Meal Plans
+      - Meal Plans
       summary: Delete a meal plan by ID
       operationId: deleteMealPlan
       parameters:
-        - name: mealPlanId
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: mealPlanId
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '204':
           description: Meal plan deleted
@@ -379,12 +379,12 @@ components:
           description: List of ingredients used in the meal
     Patient:
       type: object
-      required: [fullName, patientId, age, allergens, ingredientPreferences]
+      required: [fullName, id, age, allergens, ingredientPreferences]
       properties:
         fullName:
           type: string
           description: Full name of the patient
-        patientId:
+        id:
           type: string
           description: Unique identifier for the patient
         age:
@@ -443,26 +443,26 @@ components:
     MealsListExample:
       summary: Example list of meals
       value:
-        - id: 'grilled-chicken-salad'
-          name: 'Grilled Chicken Salad'
-          nutrients:
-            fats: 10
-            carbohydrates: 5
-            proteins: 30
-            calories: 250
-          portionSize: '250g'
-          allergens: ['nuts']
-          ingredients: ['chicken', 'mixed greens', 'olive oil', 'almonds']
-        - id: 'vegetable-stir-fry'
-          name: 'Vegetable Stir Fry'
-          nutrients:
-            fats: 5
-            carbohydrates: 20
-            proteins: 5
-            calories: 150
-          portionSize: '300g'
-          allergens: ['soy']
-          ingredients: ['bell peppers', 'broccoli', 'soy sauce', 'tofu']
+      - id: 'grilled-chicken-salad'
+        name: 'Grilled Chicken Salad'
+        nutrients:
+          fats: 10
+          carbohydrates: 5
+          proteins: 30
+          calories: 250
+        portionSize: '250g'
+        allergens: ['nuts']
+        ingredients: ['chicken', 'mixed greens', 'olive oil', 'almonds']
+      - id: 'vegetable-stir-fry'
+        name: 'Vegetable Stir Fry'
+        nutrients:
+          fats: 5
+          carbohydrates: 20
+          proteins: 5
+          calories: 150
+        portionSize: '300g'
+        allergens: ['soy']
+        ingredients: ['bell peppers', 'broccoli', 'soy sauce', 'tofu']
     SpecificMealExample:
       summary: Specific meal details
       value:
@@ -487,16 +487,16 @@ components:
     PatientsListExample:
       summary: Example list of patients
       value:
-        - fullName: 'John Doe'
-          patientId: '1234567890'
-          age: 34
-          allergens: ['peanuts', 'shellfish']
-          ingredientPreferences: ['chicken', 'rice']
-        - fullName: 'Jane Smith'
-          patientId: '0987654321'
-          age: 29
-          allergens: ['gluten']
-          ingredientPreferences: ['beef', 'quinoa']
+      - fullName: 'John Doe'
+        patientId: '1234567890'
+        age: 34
+        allergens: ['peanuts', 'shellfish']
+        ingredientPreferences: ['chicken', 'rice']
+      - fullName: 'Jane Smith'
+        patientId: '0987654321'
+        age: 29
+        allergens: ['gluten']
+        ingredientPreferences: ['beef', 'quinoa']
     SpecificPatientExample:
       summary: Specific Patient Details
       value:
@@ -511,27 +511,27 @@ components:
         date: '2024-05-01'
         patientId: '1234567890'
         meals:
-          - mealId: 'meal001'
-            time: '08:00'
-          - mealId: 'meal002'
-            time: '12:00'
+        - mealId: 'meal001'
+          time: '08:00'
+        - mealId: 'meal002'
+          time: '12:00'
     MealPlansListExample:
       summary: Example list of meal plans
       value:
-        - date: '2024-05-01'
-          patientId: '1234567890'
-          meals:
-            - mealId: 'meal001'
-              time: '08:00'
-            - mealId: 'meal002'
-              time: '12:00'
+      - date: '2024-05-01'
+        patientId: '1234567890'
+        meals:
+        - mealId: 'meal001'
+          time: '08:00'
+        - mealId: 'meal002'
+          time: '12:00'
     SpecificMealPlanExample:
       summary: Specific Meal Plan Details
       value:
         date: '2024-05-01'
         patientId: '1234567890'
         meals:
-          - mealId: 'meal001'
-            time: '08:00'
-          - mealId: 'meal002'
-            time: '12:00'
+        - mealId: 'meal001'
+          time: '08:00'
+        - mealId: 'meal002'
+          time: '12:00'
